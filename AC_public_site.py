@@ -14,7 +14,7 @@ import numpy as np
 st.title('Ayuda Contenedores impacto')
 #%%
 # Load datas
-data_general = pd.read_excel(r"D:\\MEMORIA VIRTUAL proyecto AC\\ejemplo - excel publico.xlsx") #, sheet_name="Mapa")
+data_general = pd.read_excel(r"ejemplo - excel publico.xlsx") #, sheet_name="Mapa")
 # fix reading dates 
 data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
