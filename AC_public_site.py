@@ -8,18 +8,16 @@ STREAMLIT WEBSITE script
 
 import streamlit as st
 import pandas as pd
-import numpy as np
 import datetime
 import base64
 from streamlit_folium import st_folium
 import folium
-
 from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="my_app")
 
 
-#%% Cache
+#%% Cache geocoding
 @st.cache_data
 def get_coords(country):
     location = geolocator.geocode(country)
@@ -37,20 +35,18 @@ start_year = data_general['Fecha'].min().year #.strftime("%Y")
 end_year = data_general['Fecha'].max().year #.strftime("%Y")
 
 # Add coordinates countries
-data_general['coords'] = data_general['Destino'].apply(get_coords)
-
-
-# data_bici = pd.read_excel("ejemplo - excel publico.xlsx", sheet_name="Estadisticas bici")
-# data_ordenadores = pd.read_excel("ejemplo - excel publico.xlsx", sheet_name="Estadisticas ordenadores")
-# data_comida = pd.read_excel("ejemplo - excel publico.xlsx", sheet_name="Estadisticas comida")
-
-
-# Left side bar where to enter time period of interest
+# data_general['coords'] = data_general['Destino'].apply(get_coords)
+unique_countries = data_general['Destino'].dropna().unique()
+coords_dict = {c: get_coords(c) for c in unique_countries}
+data_general['coords'] = data_general['Destino'].map(coords_dict)
+# Left side bar where to enter time period of interest and location
 #%%
 time_range = st.sidebar.radio(
     "Selecciona periodo",
     ["Todos los años", "Especifica año(s)", "Especifica periodo"]
 )
+
+data_show = data_general.copy()
 
 if time_range == "Especifica año(s)":
     years = st.sidebar.multiselect(
@@ -76,10 +72,6 @@ elif time_range == "Especifica periodo": # Y - M - D
     data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
     
     
-else:
-    pass
-    #take all df
-    
     
 #%% Display data as table
 st.subheader('Raw data')
@@ -94,28 +86,28 @@ def get_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-def card(img_path, label, value):
+def card(img_path, text):
     img_base64 = get_base64(img_path)
 
     st.markdown(f"""
         <div style="text-align:center;">
             <img src="data:image/png;base64,{img_base64}" width="60">
-            <div style="font-size:16px; margin-top:10px;">{label}</div>
+            <div style="font-size:16px; margin-top:10px;">{text}</div>
         </div>
     """, unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    total_bicis = sum(data_show["Bici"])
+    total_bicis = data_show["Bici"].sum()
     card("images/bike.png", f"{total_bicis} bikes")
 
 with col2:
-    total_pcs = sum(data_show["Ordenadores"])
+    total_pcs = data_show["Ordenadores"].sum()
     card("images/computer.png", f"{total_pcs} computers")
 
 with col3:
-    total_food = sum(data_show["Comida"])
+    total_food = data_show["Comida"].sum()
     card("images/comida.png", f"{total_food} kg of food")
 
 
