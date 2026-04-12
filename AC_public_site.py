@@ -60,7 +60,7 @@ with st.sidebar.container():
             "Cuales año(s)?",
             list(range(start_year, end_year+1)))
         if years: 
-            data_show = data_general[data_general['Fecha'].dt.year.isin(list(map(int, years)))]
+            data_show = data_show[data_show['Fecha'].dt.year.isin(list(map(int, years)))]
         
         
     elif time_range == "Especifica periodo": # Y - M - D
@@ -74,7 +74,7 @@ with st.sidebar.container():
             today,
             format="MM.DD.YYYY")
         
-        data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
+        data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
        
 st.sidebar.markdown("---")
 
@@ -97,50 +97,6 @@ with st.sidebar.container():
             help="Escribe para buscar") 
         if selected_countries:
             data_show = data_show[data_show['Destino'].isin(selected_countries)]
-
-# # TIME PERIOD
-# time_range = st.sidebar.radio(
-#     "⏱️ Selecciona periodo:",
-#     ["Todos los años", "Especifica año(s)", "Especifica periodo"])
-
-# data_show = data_general.copy()
-
-# if time_range == "Especifica año(s)":
-#     years = st.sidebar.multiselect(
-#         "Cuales año(s)?",
-#         list(range(start_year, end_year+1)))
-#     if years: 
-#         data_show = data_general[data_general['Fecha'].dt.year.isin(list(map(int, years)))]
-    
-    
-# elif time_range == "Especifica periodo": # Y - M - D
-#     today = datetime.datetime.now()
-#     first_contenedor_date = datetime.date(start_year, 1, 1) 
-    
-#     date_range = st.sidebar.date_input(
-#         "",
-#         (first_contenedor_date, today),
-#         first_contenedor_date,
-#         today,
-#         format="MM.DD.YYYY")
-    
-#     data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
-    
-# # LOCATION 
-# locations = st.sidebar.radio(
-#     "🌍 Selecciona países:",
-#     ["Todos los países", "Especifica país(es)"])
-
- 
-# countries = sorted(data_show["Destino"].dropna().unique())
-
-# if locations == "Especifica país(es)":
-#     selected_countries = st.sidebar.multiselect(
-#         "",
-#         options=countries,
-#         default=[],
-#         help="Escribe para buscar países") 
-#     data_show = data_general[data_general['Destino'].isin(selected_countries)]
 
     
 #%% Display data as table
