@@ -108,7 +108,7 @@ with col2:
 
 with col3:
     total_food = data_show["Comida"].sum()
-    card("images/comida.png", f"{total_food} kg of food")
+    card("images/food.png", f"{total_food} kg of food")
 
 
 #%%
