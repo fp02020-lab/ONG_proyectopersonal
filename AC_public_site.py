@@ -117,20 +117,15 @@ def card(img_path, text):
 
     st.markdown(f"""
         <div style="
-            height:180px;
-            border-radius:12px;
-            box-shadow:0 4px 10px rgba(0,0,0,0.1);
-            background:white;
-
+            text-align:center;
+            height:150px;
             display:flex;
             flex-direction:column;
             justify-content:center;
             align-items:center;
         ">
-            <img src="data:image/png;base64,{img_base64}"
-                 style="height:80px; width:auto; object-fit:contain;">
-
-            <div style="margin-top:10px; font-size:18px; font-weight:bold;">
+            <img src="data:image/png;base64,{img_base64}" height="80">
+            <div style="font-size:18px; margin-top:10px; font-weight:bold;">
                 {text}
             </div>
         </div>
