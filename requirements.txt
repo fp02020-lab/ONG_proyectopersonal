@@ -2,4 +2,6 @@ streamlit
 pandas
 numpy
 openpyxl
-base64
+folium
+streamlit-folium
+geopy
