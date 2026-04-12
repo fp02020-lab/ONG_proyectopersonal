@@ -39,39 +39,109 @@ end_year = data_general['Fecha'].max().year #.strftime("%Y")
 unique_countries = data_general['Destino'].dropna().unique()
 coords_dict = {c: get_coords(c) for c in unique_countries}
 data_general['coords'] = data_general['Destino'].map(coords_dict)
-# Left side bar where to enter time period of interest and location
-#%%
-time_range = st.sidebar.radio(
-    "Selecciona periodo",
-    ["Todos los años", "Especifica año(s)", "Especifica periodo"]
-)
 
-data_show = data_general.copy()
 
-if time_range == "Especifica año(s)":
-    years = st.sidebar.multiselect(
-        "Cuales año(s)?",
-        list(range(start_year, end_year+1))
-    )
-    if years: 
-        data_show = data_general[data_general['Fecha'].dt.year.isin(list(map(int, years)))]
+# 
+#%% Left side bar where to enter time period of interest and location
+st.sidebar.title("🔎 Filters")
+
+# TIME SECTION
+with st.sidebar.container():
+    st.markdown("### ⏱️ Time period")
+
+    time_range = st.radio(
+        "Selecciona periodo",
+        ["Todos los años", "Especifica año(s)", "Especifica periodo"])
+
+    data_show = data_general.copy()
+
+    if time_range == "Especifica año(s)":
+        years = st.multiselect(
+            "Cuales año(s)?",
+            list(range(start_year, end_year+1)))
+        if years: 
+            data_show = data_general[data_general['Fecha'].dt.year.isin(list(map(int, years)))]
+        
+        
+    elif time_range == "Especifica periodo": # Y - M - D
+        today = datetime.datetime.today()
+        first_contenedor_date = datetime.date(start_year, 1, 1) 
+        
+        date_range = st.date_input(
+            "Rango de fechas",
+            (first_contenedor_date, today),
+            first_contenedor_date,
+            today,
+            format="MM.DD.YYYY")
+        
+        data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
+       
+st.sidebar.markdown("---")
+
+# LOCATION 
+with st.sidebar.container():
+    st.markdown("### 🌍 Location")
+
+    locations = st.radio(
+        "🌍 Selecciona países:",
+        ["Todos los países", "Especifica país(es)"])
+
+     
+    countries = sorted(data_show["Destino"].dropna().unique())
+    
+    if locations == "Especifica país(es)":
+        selected_countries = st.multiselect(
+            "Buscar países",
+            options=countries,
+            default=[],
+            help="Escribe para buscar") 
+        if selected_countries:
+            data_show = data_show[data_show['Destino'].isin(selected_countries)]
+
+# # TIME PERIOD
+# time_range = st.sidebar.radio(
+#     "⏱️ Selecciona periodo:",
+#     ["Todos los años", "Especifica año(s)", "Especifica periodo"])
+
+# data_show = data_general.copy()
+
+# if time_range == "Especifica año(s)":
+#     years = st.sidebar.multiselect(
+#         "Cuales año(s)?",
+#         list(range(start_year, end_year+1)))
+#     if years: 
+#         data_show = data_general[data_general['Fecha'].dt.year.isin(list(map(int, years)))]
     
     
-elif time_range == "Especifica periodo": # Y - M - D
-    today = datetime.datetime.now()
-    first_contenedor_date = datetime.date(start_year, 1, 1) 
+# elif time_range == "Especifica periodo": # Y - M - D
+#     today = datetime.datetime.now()
+#     first_contenedor_date = datetime.date(start_year, 1, 1) 
     
-    date_range = st.date_input(
-        "Select your vacation for next year",
-        (first_contenedor_date, today),
-        first_contenedor_date,
-        today,
-        format="MM.DD.YYYY",
-    )
+#     date_range = st.sidebar.date_input(
+#         "",
+#         (first_contenedor_date, today),
+#         first_contenedor_date,
+#         today,
+#         format="MM.DD.YYYY")
     
-    data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
+#     data_show = data_general[(data_general['Fecha'] >= pd.to_datetime(date_range[0])) & (data_general['Fecha'] <= pd.to_datetime(date_range[1]))]
     
-    
+# # LOCATION 
+# locations = st.sidebar.radio(
+#     "🌍 Selecciona países:",
+#     ["Todos los países", "Especifica país(es)"])
+
+ 
+# countries = sorted(data_show["Destino"].dropna().unique())
+
+# if locations == "Especifica país(es)":
+#     selected_countries = st.sidebar.multiselect(
+#         "",
+#         options=countries,
+#         default=[],
+#         help="Escribe para buscar países") 
+#     data_show = data_general[data_general['Destino'].isin(selected_countries)]
+
     
 #%% Display data as table
 st.subheader('Raw data')
@@ -90,9 +160,18 @@ def card(img_path, text):
     img_base64 = get_base64(img_path)
 
     st.markdown(f"""
-        <div style="text-align:center;">
+        <div style="
+            text-align:center;
+            height:150px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        ">
             <img src="data:image/png;base64,{img_base64}" width="60">
-            <div style="font-size:16px; margin-top:10px;">{text}</div>
+            <div style="font-size:18px; margin-top:10px; font-weight:bold;">
+                {text}
+            </div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -112,7 +191,7 @@ with col3:
 
 
 #%%
-st.subheader('Map of all pickups')
+st.subheader('Mapa de envios')
 
 
 m = folium.Map(location=[20, 0], zoom_start=2) #world view
