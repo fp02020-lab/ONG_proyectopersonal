@@ -31,9 +31,10 @@ st.title('Ayuda Contenedores impacto')
 data_general = pd.read_excel("testfile.xlsx", engine="openpyxl")
 # fix reading dates 
 data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
-data_general['Fecha'] = data_general['Fecha'].dt.strftime('%d/%m/%Y')
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
 end_year = data_general['Fecha'].max().year #.strftime("%Y")
+
+data_general['Fecha'] = data_general['Fecha'].dt.strftime('%d/%m/%Y')
 
 # Add coordinates countries
 unique_countries = data_general['Destino'].dropna().unique()
