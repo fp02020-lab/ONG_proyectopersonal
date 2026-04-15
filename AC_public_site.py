@@ -31,11 +31,11 @@ st.title('Ayuda Contenedores impacto')
 data_general = pd.read_excel("testfile.xlsx", engine="openpyxl")
 # fix reading dates 
 data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
+data_general['Fecha'] = data_general['Fecha'].dt.strftime('%d/%m/%Y')
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
 end_year = data_general['Fecha'].max().year #.strftime("%Y")
 
 # Add coordinates countries
-# data_general['coords'] = data_general['Destino'].apply(get_coords)
 unique_countries = data_general['Destino'].dropna().unique()
 coords_dict = {c: get_coords(c) for c in unique_countries}
 data_general['coords'] = data_general['Destino'].map(coords_dict)
@@ -43,14 +43,14 @@ data_general['coords'] = data_general['Destino'].map(coords_dict)
 
 # 
 #%% Left side bar where to enter time period of interest and location
-st.sidebar.title("🔎 Filters")
+st.sidebar.title("Filtros")
 
 # TIME SECTION
 with st.sidebar.container():
-    st.markdown("### ⏱️ Time period")
+    st.markdown("### ⏱️ Período de tiempo")
 
     time_range = st.radio(
-        "Selecciona periodo",
+        "Selecciona periodo:",
         ["Todos los años", "Especifica año(s)", "Especifica periodo"])
 
     data_show = data_general.copy()
@@ -80,10 +80,10 @@ st.sidebar.markdown("---")
 
 # LOCATION 
 with st.sidebar.container():
-    st.markdown("### 🌍 Location")
+    st.markdown("### 🌍 Destino")
 
     locations = st.radio(
-        "🌍 Selecciona países:",
+        "Selecciona países:",
         ["Todos los países", "Especifica país(es)"])
 
      
@@ -97,14 +97,9 @@ with st.sidebar.container():
             help="Escribe para buscar") 
         if selected_countries:
             data_show = data_show[data_show['Destino'].isin(selected_countries)]
-
-    
-#%% Display data as table
-st.subheader('Raw data')
-st.write(data_show) # this displays all kinds of data based on type
    
 #%%
-st.subheader('Statistics')
+st.subheader('Material enviado')
 
 # Calculate and display totals
 
@@ -131,19 +126,82 @@ def card(img_path, text):
         </div>
     """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
+# ---- ROW 1 (4 columns) ----
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     total_bicis = data_show["Bici"].sum()
-    card("images/bike.png", f"{total_bicis} bikes")
+    card("images/bike.png", f"{total_bicis} bicis")
 
 with col2:
     total_pcs = data_show["Ordenadores"].sum()
-    card("images/computer.png", f"{total_pcs} computers")
+    card("images/computer.png", f"{total_pcs} ordenadores")
 
 with col3:
     total_food = data_show["Comida"].sum()
-    card("images/food.png", f"{total_food} kg of food")
+    card("images/food.png", f"{total_food/1000:.1f} ton de comida")
+
+with col4:
+    total_hospital = data_show["Hospital"].sum()  
+    card("images/hospital.png", f"{total_hospital} cajas de material de hospital")
+
+
+# ---- ROW 2 (4 columns) ----
+col5, col6, col7, col8 = st.columns(4)
+
+with col5:
+    total_clothes = data_show["Ropa"].sum()  
+    card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+with col6:
+    total_tools = data_show["Herramientas"].sum()  
+    card("images/tools.png", f"{total_tools} herramientas") # measured in pallets or machines
+
+with col7:
+    total_solar = data_show["Solar"].sum()  
+    card("images/tools.png", f"{total_tools} herramientas")
+
+with col8:
+    total_sewing = data_show["Costura"].sum()  
+    card("images/tools.png", f"{total_tools} herramientas")
+    
+expander = st.expander("Otras donaciones")
+
+with expander:
+
+    # ---- ROW 1 ----
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    with col2:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    with col3:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    with col4:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    # ---- ROW 2 ----
+    col5, col6, col7 = st.columns(3)
+
+    with col5:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    with col6:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+
+    with col7:
+        total_clothes = data_show["Ropa"].sum()  
+        card("images/clothes.png", f"{total_clothes} cajas de ropa")
 
 
 #%%
@@ -166,3 +224,7 @@ for _, row in data_show.iterrows():
 
 st_folium(m, width=700, height=500)
 
+#%% Display data as table
+st.subheader('Datos')
+raw_data_show = data_show.copy()
+st.write(raw_data_show.drop(['coords'], axis=1)) # this displays all kinds of data based on type
