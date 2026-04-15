@@ -146,6 +146,7 @@ with col4:
 
 
 # ---- ROW 2 (4 columns) ----
+st.write("") # spacing vertical
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
@@ -158,7 +159,7 @@ with col6:
 
 with col7:
     total_solar = data_show["Solar"].sum()  
-    card("images/tools.png", f"{total_solar} plantas fotovoltaicas")
+    card("images/solar.png", f"{total_solar} plantas fotovoltaicas")
 
 with col8:
     total_sewing = data_show["Costura"].sum()  
@@ -188,6 +189,7 @@ with expander:
         card("images/skates.png", f"{total_skates} patines")
 
     # ---- ROW 2 ----
+    st.write("") # spacing vertical
     col5, col6, col7, col8 = st.columns(4)
 
     with col5:
