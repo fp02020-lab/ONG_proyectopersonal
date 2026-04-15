@@ -131,7 +131,7 @@ def card(img_path, text):
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    total_bicis = data_show["Bici"].sum()
+    total_bicis = data_show["Bicis"].sum()
     card("images/bike.png", f"{total_bicis} bicis")
 
 with col2:
