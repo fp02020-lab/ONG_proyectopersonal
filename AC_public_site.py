@@ -34,8 +34,6 @@ data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, err
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
 end_year = data_general['Fecha'].max().year #.strftime("%Y")
 
-data_general['Fecha'] = data_general['Fecha'].dt.strftime('%d/%m/%Y')
-
 # Add coordinates countries
 unique_countries = data_general['Destino'].dropna().unique()
 coords_dict = {c: get_coords(c) for c in unique_countries}
@@ -160,11 +158,11 @@ with col6:
 
 with col7:
     total_solar = data_show["Solar"].sum()  
-    card("images/tools.png", f"{total_tools} herramientas")
+    card("images/tools.png", f"{total_solar} plantas fotovoltaicas")
 
 with col8:
     total_sewing = data_show["Costura"].sum()  
-    card("images/tools.png", f"{total_tools} herramientas")
+    card("images/costura.png", f"{total_sewing} maquinas de cocer")
     
 expander = st.expander("Otras donaciones")
 
@@ -174,35 +172,37 @@ with expander:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_clothes = data_show["Material de costruccion"].sum()  
+        card("images/construction.png", f"{total_clothes} material de costruccion")
 
     with col2:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_housestuff = data_show["Articulos de casa"].sum()  
+        card("images/house.png", f"{total_housestuff} articulos de casa")
 
     with col3:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_toys = data_show["Juegos"].sum()  
+        card("images/toys.png", f"{total_toys} juegos")
 
     with col4:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_skates = data_show["Patines"].sum()  
+        card("images/skates.png", f"{total_skates} patines")
 
     # ---- ROW 2 ----
-    col5, col6, col7 = st.columns(3)
+    col5, col6, col7, col8 = st.columns(4)
 
     with col5:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_cleaning = data_show["Limpieza y higiene"].sum()  
+        card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene")
 
     with col6:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_school = data_show["Material escolar"].sum()  
+        card("images/school.png", f"{total_school} cajas de material escolar")
 
     with col7:
-        total_clothes = data_show["Ropa"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa")
+        total_others = data_show["Otro"].sum()  
+        card("images/others.png", f"{total_others} otro material")
+    with col8:
+        pass
 
 
 #%%
@@ -227,5 +227,8 @@ st_folium(m, width=700, height=500)
 
 #%% Display data as table
 st.subheader('Datos')
+
 raw_data_show = data_show.copy()
+raw_data_show['Fecha'] = raw_data_show['Fecha'].dt.strftime('%d/%m/%Y')
+
 st.write(raw_data_show.drop(['coords'], axis=1)) # this displays all kinds of data based on type
