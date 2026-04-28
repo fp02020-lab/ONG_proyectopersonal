@@ -67,6 +67,7 @@ data_general['coords'] = data_general['Destino'].map(coords_dict)
 # 
 #%% Left side bar where to enter time period of interest and location
 st.sidebar.title("Filtros")
+st.markdown("<div style='height:80px'></div>", unsafe_allow_html=True)
 
 # TIME SECTION
 with st.sidebar.container():
@@ -98,7 +99,7 @@ with st.sidebar.container():
             format="MM.DD.YYYY")
         
         data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
-        st.markdown("<div style='height:120px'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:100px'></div>", unsafe_allow_html=True)
         
 st.sidebar.markdown("---")
 
