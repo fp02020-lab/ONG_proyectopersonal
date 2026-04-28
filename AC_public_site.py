@@ -14,6 +14,7 @@ from streamlit_folium import st_folium
 import folium
 from folium.features import DivIcon
 from geopy.geocoders import Nominatim
+import numpy as np
 
 geolocator = Nominatim(user_agent="my_app")
 
@@ -94,31 +95,22 @@ with st.sidebar.container():
     
         start_date = st.sidebar.date_input(
             "Fecha inicio",
-            first_contenedor_date
-        )
+            first_contenedor_date)
         
         end_date = st.sidebar.date_input(
             "Fecha fin",
-            today
-        )
+            today)
         
         data_show = data_show[
             (data_show["Fecha"] >= pd.to_datetime(start_date)) &
-            (data_show["Fecha"] <= pd.to_datetime(end_date))
-        ]
+            (data_show["Fecha"] <= pd.to_datetime(end_date)) ]
     
-        # today = datetime.datetime.today()
-        # first_contenedor_date = datetime.date(start_year, 1, 1) 
-        
-        # st.sidebar.markdown("<div style='height:80px'></div>", unsafe_allow_html=True)
-        
         # date_range = st.date_input(
         #     "Rango de fechas",
         #     (first_contenedor_date, today),
         #     first_contenedor_date,
         #     today,
         #     format="MM.DD.YYYY")
-        
         # data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
         
         
@@ -347,8 +339,17 @@ for coords, group in grouped:
 st_folium(m, width=700, height=500)
 
 
+#%% Display histogram
+st.subheader('Histórico de envíos por año')
+# AC historical data
+d = {"Año": np.arange(2012,2026), "Envíos": [7,9,12,13,21,24,29,33,24,34,45,51,59,66]}
+df = pd.DataFrame(data=d)
+st.bar_chart(
+    df.set_index("Año"),
+    color="#4CAF50"
+)
 
-#%% Display data as table
+#%% Display raw data as table
 st.subheader('Datos')
 
 raw_data_show = data_show.copy()
