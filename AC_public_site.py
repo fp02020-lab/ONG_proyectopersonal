@@ -245,7 +245,7 @@ with expander:
              "Incluye cajas de herramientas y máquinas.") # measured in pallets or machines
              
     with col2:
-        total_construction = data_show["Material de costruccion  [-]"].sum()  
+        total_construction = data_show["Material de costruccion [-]"].sum()  
         card("images/construction.png", f"{total_construction} material de costrucción", 
              "Incluye materiales para la construcción como andamios, kits de iluminación, puertas y ventanas.")  
 
