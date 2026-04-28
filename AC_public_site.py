@@ -213,79 +213,30 @@ st.subheader('Mapa de envios')
 
 # Group data by coordinates
 data_show = data_show.copy()
-
 data_show = data_show[data_show['coords'].notna()]
-
 data_show['coords'] = data_show['coords'].apply(
-    lambda x: tuple(x) if isinstance(x, list) else x
-)
+    lambda x: tuple(x) if isinstance(x, list) else x)
 grouped = data_show.groupby('coords')
 
+# Plot map
 m = folium.Map(location=[20, 0], zoom_start=2)
 
 for coords, group in grouped:
     count = len(group)
 
-    # Unique ID per marker (VERY important)
-    uid = str(abs(hash(coords)))
+    popup_lines = ""
 
-    items_html = ""
-    details_html = []
-    
-    for i, (_, row) in enumerate(group.iterrows()):
-        detail = f"""
-            <b>Contenedor:</b> {row['Numero Contenedor']}<br>
-            <b>Destino:</b> {row['Destino']}<br>
-            <b>Fecha:</b> {row['Fecha']}<br>
-            <a href="{row['Enlace']}" target="_blank">Abrir enlace</a>
+    for _, row in group.iterrows():
+        popup_lines += f"""
+        <a href="{row['Enlace']}" target="_blank">
+            Contenedor {row['Numero Contenedor']}
+        </a> a {row['Destino']}<br>
+        Fecha: {row['Fecha']}<br><br>
         """
-        details_html.append(detail.replace('"', '&quot;').replace("\n", ""))
-    
-    for i, detail in enumerate(details_html):
-        items_html += f'''
-        <li>
-            <a href="#"
-               onclick="
-               var menu = this.closest('div').querySelector('.menu');
-               var detailDiv = this.closest('div').querySelector('.detail');
-               var content = this.closest('div').querySelector('.content');
-    
-               menu.style.display='none';
-               detailDiv.style.display='block';
-               content.innerHTML=&quot;{detail}&quot;;
-               return false;
-               ">
-               Contenedor {group.iloc[i]['Numero Contenedor']}
-            </a>
-        </li>
-        '''
-    
-    popup_html = f"""
-    <div style="width:250px; max-height:200px; overflow-y:auto;">
-    
-        <div class="menu">
-            <b>Envíos ({count}):</b>
-            <ul style="padding-left:15px;">
-                {items_html}
-            </ul>
-        </div>
-    
-        <div class="detail" style="display:none;">
-            <button onclick="
-                var parent = this.closest('div').parentElement;
-                parent.querySelector('.menu').style.display='block';
-                parent.querySelector('.detail').style.display='none';
-            ">⬅ Volver</button>
-    
-            <div class="content" style="margin-top:10px;"></div>
-        </div>
-    
-    </div>
-    """
 
     folium.Marker(
-        location=list(coords),
-        popup=folium.Popup(popup_html, max_width=300),
+        location=list(coords),  # convert back to list for folium
+        popup=folium.Popup(popup_lines, max_width=300),
         icon=DivIcon(
             html=f"""
             <div style="
@@ -302,37 +253,6 @@ for coords, group in grouped:
             """
         )
     ).add_to(m)
-# for coords, group in grouped:
-#     count = len(group)
-
-#     popup_lines = ""
-
-#     for _, row in group.iterrows():
-#         popup_lines += f"""
-#         Contenedor {row['Numero Contenedor']} a {row['Destino']}<br>
-#         Fecha: {row['Fecha']}<br>
-#         <a href="{row['Enlace']}" target="_blank">Link</a><br><br>
-#         """
-
-#     folium.Marker(
-#         location=list(coords),  # convert back to list for folium
-#         popup=folium.Popup(popup_lines, max_width=300),
-#         icon=DivIcon(
-#             html=f"""
-#             <div style="
-#                 background-color:green;
-#                 border-radius:50%;
-#                 width:30px;
-#                 height:30px;
-#                 text-align:center;
-#                 color:white;
-#                 font-weight:bold;
-#                 line-height:30px;">
-#                 {count}
-#             </div>
-#             """
-#         )
-#     ).add_to(m)
 
 st_folium(m, width=700, height=500)
 
