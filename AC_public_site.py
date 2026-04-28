@@ -75,6 +75,8 @@ with st.sidebar.container():
     time_range = st.radio(
         "Selecciona periodo:",
         ["Todos los años", "Especifica año(s)", "Especifica periodo"])
+    
+    st.markdown("<div style='margin-top:30px'></div>", unsafe_allow_html=True)
 
     data_show = data_general.copy()
 
@@ -90,7 +92,7 @@ with st.sidebar.container():
         today = datetime.datetime.today()
         first_contenedor_date = datetime.date(start_year, 1, 1) 
         
-        st.sidebar.markdown("<div style='height:40px'></div>", unsafe_allow_html=True)
+        st.sidebar.markdown("<div style='height:80px'></div>", unsafe_allow_html=True)
         
         date_range = st.date_input(
             "Rango de fechas",
