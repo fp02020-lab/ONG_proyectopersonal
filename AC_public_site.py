@@ -89,6 +89,9 @@ with st.sidebar.container():
         
         
     elif time_range == "Especifica periodo": # Y - M - D
+        today = datetime.datetime.today()
+        first_contenedor_date = datetime.date(start_year, 1, 1) 
+    
         start_date = st.sidebar.date_input(
             "Fecha inicio",
             first_contenedor_date
