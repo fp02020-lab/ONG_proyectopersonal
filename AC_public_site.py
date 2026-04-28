@@ -12,6 +12,7 @@ import datetime
 import base64
 from streamlit_folium import st_folium
 import folium
+from folium.features import DivIcon
 from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="my_app")
@@ -215,6 +216,7 @@ m = folium.Map(location=[20, 0], zoom_start=2) #world view
 
 for _, row in data_show.iterrows():
     if row['coords'] is not None:
+        count = 4
         folium.Marker(
             location=row['coords'],
             popup=f"""
@@ -222,10 +224,27 @@ for _, row in data_show.iterrows():
                 Fecha: {row['Fecha']}<br>
                 <a href="{row['Enlace']}" target="_blank">Link</a>
             """,
-            icon=folium.Icon(color="red")
+            # icon=folium.Icon(color="red")
+            icon=DivIcon(
+                html=f"""
+                <div style="
+                    background-color:red;
+                    border-radius:50%;
+                    width:30px;
+                    height:30px;
+                    text-align:center;
+                    color:white;
+                    font-weight:bold;
+                    line-height:30px;">
+                    {count}
+                </div>
+                """
+            )
         ).add_to(m)
 
 st_folium(m, width=700, height=500)
+
+
 
 #%% Display data as table
 st.subheader('Datos')
