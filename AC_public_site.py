@@ -90,13 +90,14 @@ with st.sidebar.container():
         today = datetime.datetime.today()
         first_contenedor_date = datetime.date(start_year, 1, 1) 
         
+        st.sidebar.markdown("<div style='height:40px'></div>", unsafe_allow_html=True)
+        
         date_range = st.date_input(
             "Rango de fechas",
             (first_contenedor_date, today),
             first_contenedor_date,
             today,
             format="MM.DD.YYYY")
-        st.sidebar.markdown("<div style='height:400px'></div>", unsafe_allow_html=True)
         
         data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
         
