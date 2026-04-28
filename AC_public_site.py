@@ -107,23 +107,73 @@ def get_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-def card(img_path, text):
+# def card(img_path, text):
+#     img_base64 = get_base64(img_path)
+
+#     st.markdown(f"""
+#         <div style="
+#             text-align:center;
+#             height:150px;
+#             display:flex;
+#             flex-direction:column;
+#             justify-content:center;
+#             align-items:center;
+#         ">
+#             <img src="data:image/png;base64,{img_base64}" height="80">
+#             <div style="font-size:18px; margin-top:10px; font-weight:bold;">
+#                 {text}
+#             </div>
+#         </div>
+#     """, unsafe_allow_html=True)
+
+def card(img_path, text, tooltip):
     img_base64 = get_base64(img_path)
 
     st.markdown(f"""
         <div style="
+            position:relative;
             text-align:center;
             height:150px;
             display:flex;
             flex-direction:column;
             justify-content:center;
             align-items:center;
+            cursor:pointer;
         ">
+
             <img src="data:image/png;base64,{img_base64}" height="80">
+
             <div style="font-size:18px; margin-top:10px; font-weight:bold;">
                 {text}
             </div>
+
+            <!-- Tooltip -->
+            <div style="
+                visibility:hidden;
+                opacity:0;
+                position:absolute;
+                bottom:110%;
+                background-color:black;
+                color:white;
+                text-align:center;
+                padding:6px 10px;
+                border-radius:6px;
+                font-size:12px;
+                width:160px;
+                transition:opacity 0.3s;
+                z-index:1;
+            " class="tooltip">
+                {tooltip}
+            </div>
+
         </div>
+
+        <style>
+        div:hover > .tooltip {{
+            visibility:visible;
+            opacity:1;
+        }}
+        </style>
     """, unsafe_allow_html=True)
 
 # ---- ROW 1 (4 columns) ----
@@ -131,19 +181,22 @@ col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     total_bicis = data_show["Bicis"].sum()
-    card("images/bike.png", f"{total_bicis} bicis")
+    # card("images/bike.png", f"{total_bicis} bicis")
+    card("images/bike.png",
+         f"{total_bicis} bicis",
+         "Total de bicicletas enviadas")
 
 with col2:
     total_pcs = data_show["Ordenadores"].sum()
-    card("images/computer.png", f"{total_pcs} ordenadores")
+    card("images/computer.png", f"{total_pcs} ordenadores", "")
 
 with col3:
     total_food = data_show["Comida"].sum()
-    card("images/food.png", f"{total_food/1000:.1f} ton de comida")
+    card("images/food.png", f"{total_food/1000:.1f} ton de comida", "")
 
 with col4:
     total_hospital = data_show["Hospital"].sum()  
-    card("images/hospital.png", f"{total_hospital} cajas de material de hospital")
+    card("images/hospital.png", f"{total_hospital} cajas de material de hospital", "")
 
 
 # ---- ROW 2 (4 columns) ----
@@ -152,19 +205,19 @@ col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     total_clothes = data_show["Ropa"].sum()  
-    card("images/clothes.png", f"{total_clothes} cajas de ropa")
+    card("images/clothes.png", f"{total_clothes} cajas de ropa", "")
 
 with col6:
     total_tools = data_show["Herramientas"].sum()  
-    card("images/tools.png", f"{total_tools} herramientas") # measured in pallets or machines
+    card("images/tools.png", f"{total_tools} herramientas", "") # measured in pallets or machines
 
 with col7:
     total_solar = data_show["Solar"].sum()  
-    card("images/solar.png", f"{total_solar} plantas fotovoltaicas")
+    card("images/solar.png", f"{total_solar} plantas fotovoltaicas", "")
 
 with col8:
     total_sewing = data_show["Costura"].sum()  
-    card("images/costura.png", f"{total_sewing} maquinas de cocer")
+    card("images/costura.png", f"{total_sewing} maquinas de cocer", "")
     
 expander = st.expander("Otras donaciones")
 
@@ -175,19 +228,19 @@ with expander:
 
     with col1:
         total_clothes = data_show["Material de costruccion"].sum()  
-        card("images/construction.png", f"{total_clothes} material de costruccion")
+        card("images/construction.png", f"{total_clothes} material de costruccion", "")
 
     with col2:
         total_housestuff = data_show["Articulos de casa"].sum()  
-        card("images/house.png", f"{total_housestuff} articulos de casa")
+        card("images/house.png", f"{total_housestuff} articulos de casa", "")
 
     with col3:
         total_toys = data_show["Juegos"].sum()  
-        card("images/toys.png", f"{total_toys} juegos")
+        card("images/toys.png", f"{total_toys} juegos", "")
 
     with col4:
         total_skates = data_show["Patines"].sum()  
-        card("images/skates.png", f"{total_skates} patines")
+        card("images/skates.png", f"{total_skates} patines", "")
 
     # ---- ROW 2 ----
     st.write("") # spacing vertical
@@ -195,15 +248,15 @@ with expander:
 
     with col5:
         total_cleaning = data_show["Limpieza y higiene"].sum()  
-        card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene")
+        card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene", "")
 
     with col6:
         total_school = data_show["Material escolar"].sum()  
-        card("images/school.png", f"{total_school} cajas de material escolar")
+        card("images/school.png", f"{total_school} cajas de material escolar", "")
 
     with col7:
         total_others = data_show["Otro"].sum()  
-        card("images/others.png", f"{total_others} otro material")
+        card("images/others.png", f"{total_others} otro material", "")
     with col8:
         pass
 
