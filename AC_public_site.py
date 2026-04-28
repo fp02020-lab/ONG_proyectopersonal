@@ -96,15 +96,10 @@ with st.sidebar.container():
             first_contenedor_date,
             today,
             format="MM.DD.YYYY")
+        st.sidebar.markdown("<div style='height:400px'></div>", unsafe_allow_html=True)
         
         data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
-        st.markdown("""
-        <style>
-        div[data-testid="stDateInput"] {
-            margin-bottom: 200px !important;
-        }
-        </style>
-        """, unsafe_allow_html=True)
+        
         
 st.sidebar.markdown("---")
 
