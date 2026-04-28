@@ -107,73 +107,38 @@ def get_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# def card(img_path, text):
-#     img_base64 = get_base64(img_path)
-
-#     st.markdown(f"""
-#         <div style="
-#             text-align:center;
-#             height:150px;
-#             display:flex;
-#             flex-direction:column;
-#             justify-content:center;
-#             align-items:center;
-#         ">
-#             <img src="data:image/png;base64,{img_base64}" height="80">
-#             <div style="font-size:18px; margin-top:10px; font-weight:bold;">
-#                 {text}
-#             </div>
-#         </div>
-#     """, unsafe_allow_html=True)
-
-import uuid
-
-def card(img_path, text, tooltip):
-    uid = str(uuid.uuid4()).replace("-", "")
+def card(img_path, text, info):
     img_base64 = get_base64(img_path)
 
     st.markdown(f"""
-        <div class="card-{uid}" style="
-            position:relative;
+        <div style="
             text-align:center;
             height:150px;
             display:flex;
             flex-direction:column;
             justify-content:center;
             align-items:center;
-            cursor:pointer;
         ">
-
             <img src="data:image/png;base64,{img_base64}" height="80">
-
             <div style="font-size:18px; margin-top:10px; font-weight:bold;">
                 {text}
+                <details style="display:inline;">
+                        <summary style="
+                            display:inline;
+                            cursor:pointer;
+                            margin-left:5px;
+                            font-size:12px;
+                            background:#eee;
+                            border-radius:50%;
+                            padding:2px 6px;
+                        ">?</summary>
+                        <div style="font-size:12px; margin-top:5px;">
+                            {info}
+                        </div>
+                    </details>
+                </div>
             </div>
-
-            <div class="tooltip-{uid}" style="
-                visibility:hidden;
-                opacity:0;
-                position:absolute;
-                bottom:110%;
-                background-color:black;
-                color:white;
-                padding:6px 10px;
-                border-radius:6px;
-                font-size:12px;
-                width:160px;
-                transition:opacity 0.3s;
-            ">
-                {tooltip}
-            </div>
-        </div>
-
-        <style>
-        .card-{uid}:hover .tooltip-{uid} {{
-            visibility:visible;
-            opacity:1;
-        }}
-        </style>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
 # ---- ROW 1 (4 columns) ----
 col1, col2, col3, col4 = st.columns(4)
