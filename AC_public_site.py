@@ -17,6 +17,29 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="my_app")
 
+st.markdown("""
+<style>
+/* Sidebar background */
+section[data-testid="stSidebar"] {
+    background-color: #E8F5E9 !important;
+}
+
+/* Sidebar text */
+section[data-testid="stSidebar"] * {
+    color: #1B1B1B !important;
+}
+
+/* Main area stays clean white */
+.stApp {
+    background-color: white;
+}
+
+/* Optional: soften cards if you use them */
+div[data-testid="stVerticalBlock"] {
+    background-color: transparent;
+}
+</style>
+""", unsafe_allow_html=True)
 
 #%% Cache geocoding
 @st.cache_data

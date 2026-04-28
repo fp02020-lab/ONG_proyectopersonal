@@ -1,7 +1,14 @@
 [theme]
-base="dark"
-primaryColor="#00ff66"
-backgroundColor="#0b3d1f"
-secondaryBackgroundColor="#062b16"
-textColor="#ffffff"
+base="light"
+
+# Light green accent (buttons, highlights)
+primaryColor="#4CAF50"
+
+# Main app stays white-ish (default light feel)
+backgroundColor="#FFFFFF"
+
+# Sidebar background (we’ll reinforce with CSS too)
+secondaryBackgroundColor="#E8F5E9"
+
+textColor="#1B1B1B"
 font="sans serif"
