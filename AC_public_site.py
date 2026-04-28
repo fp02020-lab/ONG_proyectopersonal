@@ -340,14 +340,56 @@ st_folium(m, width=700, height=500)
 
 
 #%% Display histogram
-st.subheader('Histórico de envíos por año')
-# AC historical data
+st.subheader('📊 Histórico de envíos por año')
+# AC historical data contenedores
 d = {"Año": np.arange(2012,2026), "Envíos": [7,9,12,13,21,24,29,33,24,34,45,51,59,66]}
-df = pd.DataFrame(data=d)
+df_contenedores = pd.DataFrame(data=d)
+total_contenedores = df_contenedores["Envíos"].sum()
+st.metric("Total contenedores", total_contenedores)
+
 st.bar_chart(
-    df.set_index("Año"),
-    color="#4CAF50"
-)
+    df_contenedores.set_index("Año"),
+    color="#4CAF50")
+
+# More data
+st.subheader("📦 Envíos históricos de material")
+df_sillas_de_ruedas = pd.DataFrame(data= {"Año": np.arange(2022,2026), "Envíos": [116, 137, 161, 156]})
+df_andadores = pd.DataFrame(data= {"Año": np.arange(2022,2026), "Envíos": [62, 20, 120, 82]})
+df_bicis = pd.DataFrame(data= {"Año": np.arange(2020,2026), "Envíos": [175, 422, 630, 880, 1065, 629]})
+df_ordenadores = pd.DataFrame(data= {"Año": np.arange(2022,2026), "Envíos": [179, 589, 872, 773]})
+df_maquinas_coser = pd.DataFrame(data= {"Año": np.arange(2022,2026), "Envíos": [78, 85, 90, 123]})
+df_comida = pd.DataFrame(data= {"Año": np.arange(2020,2026), "Envíos": [59837, 49600, 347523, 430686, 472442, 601928]})
+df_porteria = pd.DataFrame(data= {"Año": np.arange(2022,2026), "Envíos": [16, 8, 10, 14]})
+df_camashospital = pd.DataFrame(data= {"Año": np.arange(2021,2026), "Envíos": [31, 64, 132, 461, 813]})
+df_cunasclimaticas = pd.DataFrame(data= {"Año": np.arange(2021,2026), "Envíos": [15, 35, 70, 40, 71]})
+
+# put datasets in a dictionary
+datasets = {
+    "Sillas de ruedas": df_sillas_de_ruedas,
+    "Andadores": df_andadores,
+    "Bicis": df_bicis,
+    "Ordenadores": df_ordenadores,
+    "Máquinas de coser": df_maquinas_coser,
+    "Comida": df_comida,
+    "Portería": df_porteria,
+    "Camas hospital": df_camashospital,
+    "Cunas climáticas": df_cunasclimaticas}
+
+selected = st.selectbox(
+    "Selecciona categoría",
+    list(datasets.keys()))
+
+df_selected = datasets[selected]
+total_selected = df_selected["Envíos"].sum()
+
+st.metric(f"Total {selected}", total_selected)
+
+st.bar_chart(
+    df_selected.set_index("Año"),
+    color="#4CAF50")
+
+
+
 
 #%% Display raw data as table
 st.subheader('Datos')
