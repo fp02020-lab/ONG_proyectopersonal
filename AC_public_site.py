@@ -226,13 +226,40 @@ for coords, group in grouped:
 
     popup_lines = ""
 
-    for _, row in group.iterrows():
-        popup_lines += f"""
-        <a href="{row['Enlace']}" target="_blank">
-            Contenedor {row['Numero Contenedor']}
-        </a> a {row['Destino']}<br>
-        Fecha: {row['Fecha']}<br><br>
+    if count > 1:
+        popup_lines = '<div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">'
+    
+        for _, row in group.iterrows():
+            popup_lines += f"""
+            <li style="margin-bottom:5px;">
+                <a href="{row['Enlace']}" target="_blank"
+                   style="text-decoration:none; font-weight:bold;">
+                    Contenedor {row['Numero Contenedor']}
+                </a> a {row['Destino']} {str(row['Fecha'])[:10]}
+            </li>
+            """
+    
+        popup_lines += "</ul></div>"
+    
+    else:
+        # single item → no bullet list
+        row = group.iloc[0]
+    
+        popup_lines = f"""
+        <div style="font-size:12px;">
+            <a href="{row['Enlace']}" target="_blank"
+               style="text-decoration:none; font-weight:bold;">
+                Contenedor {row['Numero Contenedor']}
+            </a> a {row['Destino']} {str(row['Fecha'])[:10]}
+        </div>
         """
+    # for _, row in group.iterrows():
+    #     popup_lines += f"""
+    #     <a href="{row['Enlace']}" target="_blank">
+    #         Contenedor {row['Numero Contenedor']}
+    #     </a> a {row['Destino']}<br>
+    #     {str(row['Fecha'])[:10]}<br><br>
+    #     """
 
     folium.Marker(
         location=list(coords),  # convert back to list for folium
