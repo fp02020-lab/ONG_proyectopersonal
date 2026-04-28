@@ -53,7 +53,7 @@ def get_coords(country):
 st.title('Ayuda Contenedores impacto')
 #%%
 # Load datas
-data_general = pd.read_excel("testfile.xlsx", engine="openpyxl")
+data_general = pd.read_excel("tabla_publica__TEST.xlsx", engine="openpyxl")
 # fix reading dates 
 data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
@@ -182,44 +182,55 @@ def card(img_path, text, info):
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    total_bicis = data_show["Bicis"].sum()
+    total_bicis = data_show["Bicis [-]"].sum()
     # card("images/bike.png", f"{total_bicis} bicis")
     card("images/bike.png",
          f"{total_bicis} bicis",
-         "Total de bicicletas enviadas")
+         "Número de bicicletas enviadas, no incluye las piezas de repuesto.")
 
 with col2:
-    total_pcs = data_show["Ordenadores"].sum()
-    card("images/computer.png", f"{total_pcs} ordenadores", "")
+    total_pcs = data_show["Ordenadores [-]"].sum()
+    card("images/computer.png", f"{total_pcs} ordenadores",
+         "Número de ordenadores enviados, no incluye otros dispositivos electrónicos.")
 
 with col3:
-    total_food = data_show["Comida"].sum()
-    card("images/food.png", f"{total_food/1000:.1f} ton de comida", "")
+    total_food = data_show["Comida [tons]"].sum()
+    card("images/food.png", f"{total_food/1000:.1f} ton de comida", 
+         "Toneladas de alimentos enviadas.")
 
 with col4:
-    total_hospital = data_show["Hospital"].sum()  
-    card("images/hospital.png", f"{total_hospital} cajas de material de hospital", "")
-
+    total_clothes = data_show["Ropa [-]"].sum()  
+    card("images/clothes.png", f"{total_clothes} cajas de ropa", 
+         "Incluye ropa, bolsas, zapatos, ropa de seguridad y complementos.")
+    
+    
+    
+#### MISSING SILLAS DE RUEDAS, CAMAS DE HOSPITAL, PORTERIAS ###########
+######TO ADD!!!!!!!!!!!!!!!!!
 
 # ---- ROW 2 (4 columns) ----
 st.write("") # spacing vertical
 col5, col6, col7, col8 = st.columns(4)
 
 with col5:
-    total_clothes = data_show["Ropa"].sum()  
-    card("images/clothes.png", f"{total_clothes} cajas de ropa", "")
+    total_hospital = data_show["Hospital [-]"].sum()  
+    card("images/hospital.png", f"{total_hospital} cajas de material de hospital",
+         "Incluye cajas de material sanitario y equipos médicos (por ejemplo, máquinas médicas y andadores).")
 
 with col6:
-    total_tools = data_show["Herramientas"].sum()  
-    card("images/tools.png", f"{total_tools} herramientas", "") # measured in pallets or machines
+    total_sillas = data_show["Sillas de ruedas [-]"].sum()  
+    card("images/sillas.png", f"{total_sillas} sillas de ruedas",
+         "Número de sillas de ruedas enviadas.")
 
 with col7:
-    total_solar = data_show["Solar"].sum()  
-    card("images/solar.png", f"{total_solar} plantas fotovoltaicas", "")
-
+    total_camas = data_show["Camas de hospital [-]"].sum()  
+    card("images/camas.png", f"{total_camas} camas de hospital",
+         "Número de camas de hospital enviadas.")
+     
 with col8:
-    total_sewing = data_show["Costura"].sum()  
-    card("images/costura.png", f"{total_sewing} maquinas de cocer", "")
+    total_sewing = data_show["Maquinas de coser [-]"].sum()  
+    card("images/costura.png", f"{total_sewing} máquinas de coser", 
+         "Número de máquinas de coser enviadas, no incluye tela y otro material de costura.")
     
 expander = st.expander("Otras donaciones")
 
@@ -229,38 +240,68 @@ with expander:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        total_clothes = data_show["Material de costruccion"].sum()  
-        card("images/construction.png", f"{total_clothes} material de costruccion", "")
-
+        total_tools = data_show["Herramientas [-]"].sum()  
+        card("images/tools.png", f"{total_tools} herramientas", 
+             "Incluye cajas de herramientas y máquinas.") # measured in pallets or machines
+             
     with col2:
-        total_housestuff = data_show["Articulos de casa"].sum()  
-        card("images/house.png", f"{total_housestuff} articulos de casa", "")
+        total_construction = data_show["Material de costruccion  [-]"].sum()  
+        card("images/construction.png", f"{total_construction} material de costrucción", 
+             "Incluye materiales para la construcción como andamios, kits de iluminación, puertas y ventanas.")  
 
     with col3:
-        total_toys = data_show["Juegos"].sum()  
-        card("images/toys.png", f"{total_toys} juegos", "")
+        total_solar = data_show["Solar [-]"].sum()  
+        card("images/solar.png", f"{total_solar} instalaciónes fotovoltaicas", 
+             "Número de instalaciónes fotovoltaicas enviadas, no encluye placas solares sueltas.")
 
     with col4:
-        total_skates = data_show["Patines"].sum()  
-        card("images/skates.png", f"{total_skates} patines", "")
+        total_housestuff = data_show["Articulos de casa [-]"].sum()  
+        card("images/house.png", f"{total_housestuff} articulos de casa", 
+             "Incluye muebles, articulos de casa, electrodomesticos y otros.")
+       
 
     # ---- ROW 2 ----
     st.write("") # spacing vertical
     col5, col6, col7, col8 = st.columns(4)
 
     with col5:
-        total_cleaning = data_show["Limpieza y higiene"].sum()  
-        card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene", "")
+        total_toys = data_show["Juegos [-]"].sum()  
+        card("images/toys.png", f"{total_toys} juegos", 
+             "Incluye juegos, material deportivo y parques infantiles.")
 
     with col6:
-        total_school = data_show["Material escolar"].sum()  
-        card("images/school.png", f"{total_school} cajas de material escolar", "")
+        total_skates = data_show["Patines [-]"].sum()  
+        card("images/skates.png", f"{total_skates} patines", 
+             "Número de patines enviados.")
 
     with col7:
-        total_others = data_show["Otro"].sum()  
-        card("images/others.png", f"{total_others} otro material", "")
+        total_porterias = data_show["Porterias de futbol [-]"].sum()  
+        card("images/porterias.png", f"{total_porterias} porterias de futbol", 
+             "Número de porterias de futbol enviadas.")
+        
     with col8:
+        total_school = data_show["Material escolar [-]"].sum()  
+        card("images/school.png", f"{total_school} cajas de material escolar", 
+             "Incluye libros, pupitres, sillas, pizarras y otro material.")
+    
+    # ---- ROW 3 ----
+    st.write("") # spacing vertical
+    col9, col10, col11, col12 = st.columns(4)
+    with col9:
+        total_cleaning = data_show["Limpieza y higiene [-]"].sum()  
+        card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene", 
+             "Incluye pallets y cajas de material de limpieza y higiene.")
+
+    with col10:
+        total_others = data_show["Otro [-]"].sum()  
+        card("images/others.png", f"{total_others} otro material", 
+             "Incluye placas solares suelta, tela, equipos electrónicos, piezas de repuesto y todas las donacciones que no caben en una categoria especifica.")        
+
+    with col11:
         pass
+    with col12:
+        pass
+
 
 
 #%% MAPA DE ENVIOS
