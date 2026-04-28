@@ -98,7 +98,8 @@ with st.sidebar.container():
             format="MM.DD.YYYY")
         
         data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
-       
+        st.markdown("<div style='height:120px'></div>", unsafe_allow_html=True)
+        
 st.sidebar.markdown("---")
 
 # LOCATION 
