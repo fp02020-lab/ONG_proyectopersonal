@@ -212,67 +212,33 @@ with expander:
 st.subheader('Mapa de envios')
 
 # Group data by coordinates
-grouped = data_show[data_show['coords'].notna()].groupby('coords')
+data_show = data_show.copy()
+
+data_show = data_show[data_show['coords'].notna()]
+
+data_show['coords'] = data_show['coords'].apply(
+    lambda x: tuple(x) if isinstance(x, list) else x
+)
+grouped = data_show.groupby('coords')
+
 
 m = folium.Map(location=[20, 0], zoom_start=2)
 
 for coords, group in grouped:
     count = len(group)
 
-    # Build list of items
-    items_html = "<ul>"
-    details_js_array = []
+    popup_lines = ""
 
-    for i, (_, row) in enumerate(group.iterrows()):
-        items_html += f'''
-        <li>
-            <a href="#" onclick="showDetail({i})">
-                Contenedor {row['Numero Contenedor']}
-            </a>
-        </li>
-        '''
-
-        details_js_array.append(f"""
-            <b>Contenedor:</b> {row['Numero Contenedor']}<br>
-            <b>Destino:</b> {row['Destino']}<br>
-            <b>Fecha:</b> {row['Fecha']}<br>
-            <a href="{row['Enlace']}" target="_blank">Link</a>
-        """)
-
-    items_html += "</ul>"
-
-    details_js = "[" + ",".join([f"`{d}`" for d in details_js_array]) + "]"
-
-    popup_html = f"""
-    <div id="main-menu">
-        <b>Selecciona un envío:</b>
-        {items_html}
-    </div>
-
-    <div id="detail-view" style="display:none;">
-        <button onclick="goBack()">⬅ Volver</button>
-        <div id="detail-content"></div>
-    </div>
-
-    <script>
-    var details = {details_js};
-
-    function showDetail(index) {{
-        document.getElementById("main-menu").style.display = "none";
-        document.getElementById("detail-view").style.display = "block";
-        document.getElementById("detail-content").innerHTML = details[index];
-    }}
-
-    function goBack() {{
-        document.getElementById("main-menu").style.display = "block";
-        document.getElementById("detail-view").style.display = "none";
-    }}
-    </script>
-    """
+    for _, row in group.iterrows():
+        popup_lines += f"""
+        Contenedor {row['Numero Contenedor']} a {row['Destino']}<br>
+        Fecha: {row['Fecha']}<br>
+        <a href="{row['Enlace']}" target="_blank">Link</a><br><br>
+        """
 
     folium.Marker(
-        location=list(coords),
-        popup=folium.Popup(popup_html, max_width=300),
+        location=list(coords),  # convert back to list for folium
+        popup=folium.Popup(popup_lines, max_width=300),
         icon=DivIcon(
             html=f"""
             <div style="
