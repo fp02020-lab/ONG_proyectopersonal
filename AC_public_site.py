@@ -76,7 +76,7 @@ with st.sidebar.container():
         "Selecciona periodo:",
         ["Todos los años", "Especifica año(s)", "Especifica periodo"])
     
-    st.markdown("<div style='margin-top:30px'></div>", unsafe_allow_html=True)
+    # st.markdown("<div style='margin-top:30px'></div>", unsafe_allow_html=True)
 
     data_show = data_general.copy()
 
@@ -89,19 +89,34 @@ with st.sidebar.container():
         
         
     elif time_range == "Especifica periodo": # Y - M - D
-        today = datetime.datetime.today()
-        first_contenedor_date = datetime.date(start_year, 1, 1) 
+        start_date = st.sidebar.date_input(
+            "Fecha inicio",
+            first_contenedor_date
+        )
         
-        st.sidebar.markdown("<div style='height:80px'></div>", unsafe_allow_html=True)
+        end_date = st.sidebar.date_input(
+            "Fecha fin",
+            today
+        )
         
-        date_range = st.date_input(
-            "Rango de fechas",
-            (first_contenedor_date, today),
-            first_contenedor_date,
-            today,
-            format="MM.DD.YYYY")
+        data_show = data_show[
+            (data_show["Fecha"] >= pd.to_datetime(start_date)) &
+            (data_show["Fecha"] <= pd.to_datetime(end_date))
+        ]
+    
+        # today = datetime.datetime.today()
+        # first_contenedor_date = datetime.date(start_year, 1, 1) 
         
-        data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
+        # st.sidebar.markdown("<div style='height:80px'></div>", unsafe_allow_html=True)
+        
+        # date_range = st.date_input(
+        #     "Rango de fechas",
+        #     (first_contenedor_date, today),
+        #     first_contenedor_date,
+        #     today,
+        #     format="MM.DD.YYYY")
+        
+        # data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
         
         
 st.sidebar.markdown("---")
