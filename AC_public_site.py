@@ -208,39 +208,87 @@ with expander:
         pass
 
 
-#%%
+#%% MAPA DE ENVIOS
 st.subheader('Mapa de envios')
 
+# Group data by coordinates
+grouped = data_show[data_show['coords'].notna()].groupby('coords')
 
-m = folium.Map(location=[20, 0], zoom_start=2) #world view
+m = folium.Map(location=[20, 0], zoom_start=2)
 
-for _, row in data_show.iterrows():
-    if row['coords'] is not None:
-        count = 4
-        folium.Marker(
-            location=row['coords'],
-            popup=f"""
-                Contenedor numero {row['Numero Contenedor']} a {row['Destino']}<br>
-                Fecha: {row['Fecha']}<br>
-                <a href="{row['Enlace']}" target="_blank">Link</a>
-            """,
-            # icon=folium.Icon(color="red")
-            icon=DivIcon(
-                html=f"""
-                <div style="
-                    background-color:red;
-                    border-radius:50%;
-                    width:30px;
-                    height:30px;
-                    text-align:center;
-                    color:white;
-                    font-weight:bold;
-                    line-height:30px;">
-                    {count}
-                </div>
-                """
-            )
-        ).add_to(m)
+for coords, group in grouped:
+    count = len(group)
+
+    # Build list of items
+    items_html = "<ul>"
+    details_js_array = []
+
+    for i, (_, row) in enumerate(group.iterrows()):
+        items_html += f'''
+        <li>
+            <a href="#" onclick="showDetail({i})">
+                Contenedor {row['Numero Contenedor']}
+            </a>
+        </li>
+        '''
+
+        details_js_array.append(f"""
+            <b>Contenedor:</b> {row['Numero Contenedor']}<br>
+            <b>Destino:</b> {row['Destino']}<br>
+            <b>Fecha:</b> {row['Fecha']}<br>
+            <a href="{row['Enlace']}" target="_blank">Link</a>
+        """)
+
+    items_html += "</ul>"
+
+    details_js = "[" + ",".join([f"`{d}`" for d in details_js_array]) + "]"
+
+    popup_html = f"""
+    <div id="main-menu">
+        <b>Selecciona un envío:</b>
+        {items_html}
+    </div>
+
+    <div id="detail-view" style="display:none;">
+        <button onclick="goBack()">⬅ Volver</button>
+        <div id="detail-content"></div>
+    </div>
+
+    <script>
+    var details = {details_js};
+
+    function showDetail(index) {{
+        document.getElementById("main-menu").style.display = "none";
+        document.getElementById("detail-view").style.display = "block";
+        document.getElementById("detail-content").innerHTML = details[index];
+    }}
+
+    function goBack() {{
+        document.getElementById("main-menu").style.display = "block";
+        document.getElementById("detail-view").style.display = "none";
+    }}
+    </script>
+    """
+
+    folium.Marker(
+        location=list(coords),
+        popup=folium.Popup(popup_html, max_width=300),
+        icon=DivIcon(
+            html=f"""
+            <div style="
+                background-color:green;
+                border-radius:50%;
+                width:30px;
+                height:30px;
+                text-align:center;
+                color:white;
+                font-weight:bold;
+                line-height:30px;">
+                {count}
+            </div>
+            """
+        )
+    ).add_to(m)
 
 st_folium(m, width=700, height=500)
 
