@@ -126,11 +126,14 @@ def get_base64(path):
 #         </div>
 #     """, unsafe_allow_html=True)
 
+import uuid
+
 def card(img_path, text, tooltip):
+    uid = str(uuid.uuid4()).replace("-", "")
     img_base64 = get_base64(img_path)
 
     st.markdown(f"""
-        <div style="
+        <div class="card-{uid}" style="
             position:relative;
             text-align:center;
             height:150px;
@@ -147,29 +150,25 @@ def card(img_path, text, tooltip):
                 {text}
             </div>
 
-            <!-- Tooltip -->
-            <div style="
+            <div class="tooltip-{uid}" style="
                 visibility:hidden;
                 opacity:0;
                 position:absolute;
                 bottom:110%;
                 background-color:black;
                 color:white;
-                text-align:center;
                 padding:6px 10px;
                 border-radius:6px;
                 font-size:12px;
                 width:160px;
                 transition:opacity 0.3s;
-                z-index:1;
-            " class="tooltip">
+            ">
                 {tooltip}
             </div>
-
         </div>
 
         <style>
-        div:hover > .tooltip {{
+        .card-{uid}:hover .tooltip-{uid} {{
             visibility:visible;
             opacity:1;
         }}
