@@ -19,7 +19,7 @@ def render():
     
     
     #%%
-    st.title('Ayuda Contenedores impacto - Material enviado')
+    st.title('Ayuda Contenedores impacto')
     
     ### NEW VERSION
     from data_loader import load_detailed_data

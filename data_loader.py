@@ -45,7 +45,10 @@ def load_historical_data(filename):
     for name, df in zip(material, dataframes):
         datasets[name] = df
         
-    return df_contenedores, datasets
+    ###### DATA for map
+    data_map = data_history_contenedores.groupby(["Destino", "Fecha"]).size().reset_index(name="Numero Contenedores")
+    
+    return df_contenedores, datasets, data_map
 
 @st.cache_data
 def load_detailed_data(filename):
