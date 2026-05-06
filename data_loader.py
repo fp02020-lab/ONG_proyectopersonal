@@ -47,6 +47,10 @@ def load_historical_data():
         
     ###### DATA for map
     data_map = data_history_contenedores.groupby(["Destino", "Fecha"]).size().reset_index(name="Numero Contenedores")
+    # Add coordinates countries
+    unique_countries = data_map['Destino'].dropna().unique()
+    coords_dict = {c: get_coords(c) for c in unique_countries}
+    data_map['coords'] = data_map['Destino'].map(coords_dict)
     
     return df_contenedores, datasets, data_map
 
