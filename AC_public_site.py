@@ -43,14 +43,19 @@ div[data-testid="stVerticalBlock"] {
 
 
 #%%
+from pages import page1
+
+st.set_page_config(page_title="Home", page_icon="🏠")
+
 st.set_page_config(page_title="Home", page_icon="🏠")
 
 page = st.sidebar.selectbox("Go to", ["Home", "Page 1"])
 
 if page == "Home":
     st.title("Home")
+
 elif page == "Page 1":
-    st.switch_page("pages/page1.py")
+    page1.render()   # ✅ call function instead of switching
 
 st.title('Ayuda Contenedores impacto')
 
