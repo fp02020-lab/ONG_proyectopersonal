@@ -48,9 +48,9 @@ def load_historical_data(filename):
     return df_contenedores, datasets
 
 @st.cache_data
-def load_detailed_data():
+def load_detailed_data(filename):
     # Load datas
-    data_general = pd.read_excel("tabla_publica__TEST.xlsx", engine="openpyxl")
+    data_general = pd.read_excel(filename, engine="openpyxl")
     # fix reading dates 
     data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 
@@ -59,3 +59,6 @@ def load_detailed_data():
     coords_dict = {c: get_coords(c) for c in unique_countries}
     data_general['coords'] = data_general['Destino'].map(coords_dict)
     return data_general
+
+
+

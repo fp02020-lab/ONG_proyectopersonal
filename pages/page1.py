@@ -13,32 +13,17 @@ import base64
 from streamlit_folium import st_folium
 import folium
 from folium.features import DivIcon
-from geopy.geocoders import Nominatim
-import numpy as np
 
-#%% Cache geocoding
-geolocator = Nominatim(user_agent="my_app")
-
-@st.cache_data
-def get_coords(country):
-    location = geolocator.geocode(country)
-    return [location.latitude, location.longitude] if location else None
 
 
 #%%
 st.title('Ayuda Contenedores impacto')
-#%%
-# Load datas
-data_general = pd.read_excel("tabla_publica__TEST.xlsx", engine="openpyxl")
-# fix reading dates 
-data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
+
+### NEW VERSION
+from data_loader import load_detailed_data
+data_general = load_detailed_data("tabla_publica__TEST.xlsx")
 start_year = data_general['Fecha'].min().year #.strftime("%Y")
 end_year = data_general['Fecha'].max().year #.strftime("%Y")
-
-# Add coordinates countries
-unique_countries = data_general['Destino'].dropna().unique()
-coords_dict = {c: get_coords(c) for c in unique_countries}
-data_general['coords'] = data_general['Destino'].map(coords_dict)
 
 
 #%% Left side bar where to enter time period of interest and location
