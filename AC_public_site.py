@@ -5,7 +5,7 @@ STREAMLIT WEBSITE script
 @author: feder
 """
 
-
+#%% IMPORT PACKAGES
 import streamlit as st
 import pandas as pd
 import datetime
@@ -16,8 +16,7 @@ from folium.features import DivIcon
 from geopy.geocoders import Nominatim
 import numpy as np
 
-geolocator = Nominatim(user_agent="my_app")
-
+#%% SET GRAPHICS
 st.markdown("""
 <style>
 /* Sidebar background */
@@ -43,6 +42,7 @@ div[data-testid="stVerticalBlock"] {
 """, unsafe_allow_html=True)
 
 #%% Cache geocoding
+geolocator = Nominatim(user_agent="my_app")
 @st.cache_data
 def get_coords(country):
     location = geolocator.geocode(country)
@@ -65,7 +65,6 @@ coords_dict = {c: get_coords(c) for c in unique_countries}
 data_general['coords'] = data_general['Destino'].map(coords_dict)
 
 
-# 
 #%% Left side bar where to enter time period of interest and location
 st.sidebar.title("Filtros")
 
