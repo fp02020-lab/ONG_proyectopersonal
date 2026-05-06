@@ -141,8 +141,11 @@ if page == "Envíos historicos":
         total = group["Numero Contenedores"].sum()
     
         # popup content (breakdown by year)
-        popup_lines = f"""{destino} <div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">"""
-    
+        popup_lines = f"""
+            <div style="font-size:12px;">
+                <b>{destino}</b>
+                <ul style="padding-left:15px; margin:0;">
+            """
         for _, row in group.iterrows():
             popup_lines += f"""
             <li>{row['Numero Contenedores']} contenedores en {int(row['Fecha'])}</li>
