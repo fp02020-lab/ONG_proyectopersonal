@@ -41,13 +41,6 @@ div[data-testid="stVerticalBlock"] {
 </style>
 """, unsafe_allow_html=True)
 
-#%% Cache geocoding
-geolocator = Nominatim(user_agent="my_app")
-@st.cache_data
-def get_coords(country):
-    location = geolocator.geocode(country)
-    return [location.latitude, location.longitude] if location else None
-
 
 #%%
 st.set_page_config(page_title="Home", page_icon="🏠")
@@ -90,6 +83,63 @@ datasets = {
     "Camas hospital": df_camashospital,
     "Cunas climáticas": df_cunasclimaticas}
 
+selected = st.selectbox(
+    "Selecciona categoría",
+    list(datasets.keys()))
+
+df_selected = datasets[selected]
+total_selected = df_selected["Envíos"].sum()
+
+st.metric(f"Total {selected}", total_selected)
+
+st.bar_chart(
+    df_selected.set_index("Año"),
+    color="#4CAF50")
+
+
+
+
+
+
+#%% ---------------------------------------------------------------------------
+
+
+
+
+
+#%% Display histogram NEW ___ READING EXCEL
+#%% LOAD FROM EXCEL HISTORICAL DATA
+data_history_contenedores = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "All containers", engine="openpyxl")
+data_history_material = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "Material", engine="openpyxl")
+
+##### ENVIOS
+years = sorted(data_history_contenedores["Fecha"].dropna().unique())
+envios = []
+for year_i in years:
+    envios.append(sum(data_history_contenedores["Fecha"] == year_i))
+df_contenedores = pd.DataFrame(data= {"Año": years, "Envíos": envios})
+
+# histogram
+st.subheader('📊 Histórico de envíos por año')
+total_contenedores = df_contenedores["Envíos"].sum()
+st.metric("Total contenedores", total_contenedores)
+st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
+
+##### MATERIAL
+material = []
+dataframes = []
+for i in np.arange(0,len(data_history_material["Material enviado"])):
+    row = data_history_material.loc[i].dropna()
+
+    material.append( data_history_material["Material enviado"][i] )
+    dataframes.append( pd.DataFrame(data= {"Año": [int(idx) for idx in row.index if str(idx).isdigit()], "Envíos": [row[idx] for idx in row.index if str(idx).isdigit()]}) )
+    
+datasets = {}
+for name, df in zip(material, dataframes):
+    datasets[name] = df
+
+# More data
+st.subheader("📦 Envíos históricos de material")
 selected = st.selectbox(
     "Selecciona categoría",
     list(datasets.keys()))
