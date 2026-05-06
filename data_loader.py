@@ -9,7 +9,7 @@ Data loader and coordinates creator
 
 import pandas as pd
 import numpy as np
-# from geopy.geocoders import Nominatim
+from geopy.geocoders import Nominatim
 import streamlit as st
 
 #%% Cache: geocoding and data
