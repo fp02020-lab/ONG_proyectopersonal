@@ -44,6 +44,14 @@ div[data-testid="stVerticalBlock"] {
 
 #%%
 st.set_page_config(page_title="Home", page_icon="🏠")
+
+page = st.sidebar.selectbox("Go to", ["Home", "Page 1"])
+
+if page == "Home":
+    st.title("Home")
+elif page == "Page 1":
+    st.switch_page("pages/page1.py")
+
 st.title('Ayuda Contenedores impacto')
 
 #%% LOAD FROM EXCEL HISTORICAL DATA
@@ -69,54 +77,4 @@ else:
     st.metric(f"Total {selected}", total_selected)
 
 st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
-
-
-
-
-# data_history_contenedores = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "All containers", engine="openpyxl")
-# data_history_material = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "Material", engine="openpyxl")
-
-# ##### ENVIOS
-# years = sorted(data_history_contenedores["Fecha"].dropna().unique())
-# envios = []
-# for year_i in years:
-#     envios.append(sum(data_history_contenedores["Fecha"] == year_i))
-# df_contenedores = pd.DataFrame(data= {"Año": years, "Envíos": envios})
-
-# # histogram
-# st.subheader('📊 Histórico de envíos por año')
-# total_contenedores = df_contenedores["Envíos"].sum()
-# st.metric("Total contenedores", total_contenedores)
-# st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
-
-# ##### MATERIAL
-# material = []
-# dataframes = []
-# for i in np.arange(0,len(data_history_material["Material enviado"])):
-#     row = data_history_material.loc[i].dropna()
-
-#     material.append( data_history_material["Material enviado"][i] )
-#     dataframes.append( pd.DataFrame(data= {"Año": [int(idx) for idx in row.index if str(idx).isdigit()], "Envíos": [row[idx] for idx in row.index if str(idx).isdigit()]}) )
-    
-# datasets = {}
-# for name, df in zip(material, dataframes):
-#     datasets[name] = df
-
-# # More data
-# st.subheader("📦 Envíos históricos de material")
-# selected = st.selectbox(
-#     "Selecciona categoría",
-#     list(datasets.keys()))
-
-# df_selected = datasets[selected]
-# total_selected = int(df_selected["Envíos"].sum())
-# if selected == "Comida":
-#     st.metric(f"Total {selected}", f"{int(total_selected/1000)} ton")
-# else:
-#     st.metric(f"Total {selected}", total_selected)
-
-# st.bar_chart(
-#     df_selected.set_index("Año"),
-#     color="#4CAF50")
-
 
