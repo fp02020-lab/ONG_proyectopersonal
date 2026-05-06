@@ -99,7 +99,7 @@ def render():
                 data_show = data_show[data_show['Destino'].isin(selected_countries)]
        
     #%%
-    st.subheader('Material enviado')
+    st.subheader('📦 Material enviado')
     
     # Calculate and display totals
     
@@ -267,7 +267,7 @@ def render():
     
     
     #%% MAPA DE ENVIOS
-    st.subheader('Mapa de envios')
+    st.subheader('📍 Mapa de envios')
     
     # Group data by coordinates
     data_show = data_show.copy()
