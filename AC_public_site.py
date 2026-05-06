@@ -45,41 +45,39 @@ div[data-testid="stVerticalBlock"] {
 #%%
 from pages import page1
 
-st.set_page_config(page_title="Home", page_icon="🏠")
+st.set_page_config(page_title="Envíos historicos")
 
-st.set_page_config(page_title="Home", page_icon="🏠")
+page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
 
-page = st.sidebar.selectbox("Go to", ["Home", "Page 1"])
+if page == "Envíos historicos":
+    st.title('Ayuda Contenedores impacto - Envíos historicos')
+    # Load data
+    from data_loader import load_historical_data
+    df_contenedores, datasets = load_historical_data("Historical_data_AC.xlsx")
 
-if page == "Home":
-    st.title("Home")
+    # Histograms
+    st.subheader('📊 Histórico de envíos por año')
+    total_contenedores = df_contenedores["Envíos"].sum()
+    st.metric("Total contenedores", total_contenedores)
+    st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
 
-elif page == "Page 1":
-    page1.render()   # ✅ call function instead of switching
+    st.subheader("📦 Envíos históricos de material")
+    selected = st.selectbox(
+        "Selecciona categoría",
+        list(datasets.keys()))
 
-st.title('Ayuda Contenedores impacto')
+    df_selected = datasets[selected]
+    total_selected = int(df_selected["Envíos"].sum())
+    if selected == "Comida":
+        st.metric(f"Total {selected}", f"{int(total_selected/1000)} ton")
+    else:
+        st.metric(f"Total {selected}", total_selected)
 
-#%% LOAD FROM EXCEL HISTORICAL DATA
-from data_loader import load_historical_data
-df_contenedores, datasets = load_historical_data("Historical_data_AC.xlsx")
+    st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
 
-# Histograms
-st.subheader('📊 Histórico de envíos por año')
-total_contenedores = df_contenedores["Envíos"].sum()
-st.metric("Total contenedores", total_contenedores)
-st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
+elif page == "Material enviado":
+    page1.render()   
 
-st.subheader("📦 Envíos históricos de material")
-selected = st.selectbox(
-    "Selecciona categoría",
-    list(datasets.keys()))
 
-df_selected = datasets[selected]
-total_selected = int(df_selected["Envíos"].sum())
-if selected == "Comida":
-    st.metric(f"Total {selected}", f"{int(total_selected/1000)} ton")
-else:
-    st.metric(f"Total {selected}", total_selected)
 
-st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
 
