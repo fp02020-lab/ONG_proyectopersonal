@@ -146,20 +146,9 @@ if page == "Envíos historicos":
         (data_map["Fecha"] >= start_year) &
         (data_map["Fecha"] <= end_year)]
 
-    # years = sorted(data_map["Fecha"].dropna().unique())
-
-    # selected_year = st.selectbox(
-    #     "Selecciona año",
-    #     ["Todos"] + list(years))
+    st.metric("Total contenedores", filtered_data["Numero Contenedores"].sum())
     
-    # if selected_year == "Todos":
-    #     filtered_data = data_map
-    # else:
-    #     filtered_data = data_map[data_map["Fecha"] == selected_year]
-    
-    ## 2. Plot
-    
-    
+    ## 2. Plot    
     filtered_data["coords"] = filtered_data["Destino"].map(coords_dict)
     filtered_data = filtered_data.dropna(subset=["coords"])
     grouped = filtered_data.groupby("Destino")
