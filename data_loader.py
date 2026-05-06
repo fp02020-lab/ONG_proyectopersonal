@@ -9,13 +9,15 @@ Data loader and coordinates creator
 
 import pandas as pd
 import numpy as np
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 import streamlit as st
 
 #%% Cache: geocoding and data
-geolocator = Nominatim(user_agent="my_app")
+geolocator = Nominatim(user_agent="my_app", timeout=10 )
 @st.cache_data
 def get_coords(country):
+    import time
+    time.sleep(1)
     location = geolocator.geocode(country)
     return [location.latitude, location.longitude] if location else None
 
@@ -47,11 +49,7 @@ def load_historical_data():
         
     ###### DATA for map
     data_map = data_history_contenedores.groupby(["Destino", "Fecha"]).size().reset_index(name="Numero Contenedores")
-    # Add coordinates countries
-    unique_countries = data_map['Destino'].dropna().unique()
-    coords_dict = {c: get_coords(c) for c in unique_countries}
-    data_map['coords'] = data_map['Destino'].map(coords_dict)
-    
+    data_map["Destino"] = data_map["Destino"].str.strip()
     return df_contenedores, datasets, data_map
 
 @st.cache_data
