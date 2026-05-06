@@ -42,9 +42,32 @@ div[data-testid="stVerticalBlock"] {
 """, unsafe_allow_html=True)
 
 
+
+#%% GEOCACHE MANUALLY
+geolocator = Nominatim(user_agent="my_app")
+
+coords_cache = {}
+
+def get_coords(country):
+    if country in coords_cache:
+        return coords_cache[country]
+
+    try:
+        location = geolocator.geocode(country)
+
+        if location:
+            coords_cache[country] = [location.latitude, location.longitude]
+        else:
+            coords_cache[country] = None
+
+    except:
+        coords_cache[country] = None
+
+    return coords_cache[country]
+
 #%%
 from pages import page1
-from data_loader import load_historical_data, get_coords
+from data_loader import load_historical_data
 
 st.set_page_config(page_title="Envíos historicos")
 
@@ -61,26 +84,46 @@ if page == "Envíos historicos":
     st.metric("Total contenedores", total_contenedores)
     st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
 
+
+
     # Plot map
-    grouped = data_map.groupby('Destino')
+    
+    # ADD COORDINATES
+    unique_countries = data_map["Destino"].dropna().unique()
+
+    coords_dict = {
+        country: get_coords(country)
+        for country in unique_countries  }
+
+    data_map["coords"] = data_map["Destino"].map(coords_dict)
+
+    # remove missing coords
+    data_map = data_map.dropna(subset=["coords"])
+    #################
+    
+    
+    grouped = data_map.groupby("Destino")
+
     m = folium.Map(location=[20, 0], zoom_start=2)
-    
-    for coords, group in grouped:
+
+    for destino, group in grouped:
+
+        coords = group["coords"].iloc[0]
         total = group["Numero Contenedores"].sum()
-    
+
         popup_lines = '<div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">'
-    
+
         for _, row in group.iterrows():
             popup_lines += f"""
             <li>
                 {row['Numero Contenedores']} contenedores en {int(row['Fecha'])}
             </li>
             """
-    
+
         popup_lines += "</ul></div>"
-        
+
         folium.Marker(
-            location=list(coords),  # convert back to list for folium
+            location=coords,
             popup=folium.Popup(popup_lines, max_width=300),
             icon=DivIcon(
                 html=f"""
