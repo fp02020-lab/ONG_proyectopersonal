@@ -133,15 +133,25 @@ if page == "Envíos historicos":
     # Plot map
     ## 1. select timeperiod
     years = sorted(data_map["Fecha"].dropna().unique())
-
-    selected_year = st.selectbox(
+    min_year = int(min(years))
+    max_year = int(max(years))
+    selected_year = st.slider(
         "Selecciona año",
-        ["Todos"] + list(years))
+        min_value=min_year,
+        max_value=max_year,
+        value=max_year )
+    filtered_data = data_map[data_map["Fecha"] == selected_year]
+
+    # years = sorted(data_map["Fecha"].dropna().unique())
+
+    # selected_year = st.selectbox(
+    #     "Selecciona año",
+    #     ["Todos"] + list(years))
     
-    if selected_year == "Todos":
-        filtered_data = data_map
-    else:
-        filtered_data = data_map[data_map["Fecha"] == selected_year]
+    # if selected_year == "Todos":
+    #     filtered_data = data_map
+    # else:
+    #     filtered_data = data_map[data_map["Fecha"] == selected_year]
     
     ## 2. Plot
     
