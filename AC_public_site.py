@@ -131,9 +131,24 @@ if page == "Envíos historicos":
 
 
     # Plot map
-    data_map["coords"] = data_map["Destino"].map(coords_dict)
-    data_map = data_map.dropna(subset=["coords"])
-    grouped = data_map.groupby("Destino")
+    ## 1. select timeperiod
+    years = sorted(data_map["Fecha"].dropna().unique())
+
+    selected_year = st.selectbox(
+        "Selecciona año",
+        ["Todos"] + list(years))
+    
+    if selected_year == "Todos":
+        filtered_data = data_map
+    else:
+        filtered_data = data_map[data_map["Fecha"] == selected_year]
+    
+    ## 2. Plot
+    
+    
+    filtered_data["coords"] = filtered_data["Destino"].map(coords_dict)
+    filtered_data = filtered_data.dropna(subset=["coords"])
+    grouped = filtered_data.groupby("Destino")
     m = folium.Map(location=[20, 0], zoom_start=2)
     for destino, group in grouped:
     
