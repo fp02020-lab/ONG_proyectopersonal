@@ -65,11 +65,7 @@ if page == "Envíos historicos":
     grouped = data_map.groupby('Destino')
     m = folium.Map(location=[20, 0], zoom_start=2)
     
-    for destino, group in grouped:
-        coords =  get_coords(destino) #calculate the coordinates
-        if coords is None:
-            st.write(destino)
-            continue
+    for coords, group in grouped:
         total = group["Numero Contenedores"].sum()
     
         popup_lines = '<div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">'
