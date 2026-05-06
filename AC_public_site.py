@@ -61,14 +61,15 @@ if page == "Envíos historicos":
     st.metric("Total contenedores", total_contenedores)
     st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
 
-    
-    
     # Plot map
     grouped = data_map.groupby('Destino')
     m = folium.Map(location=[20, 0], zoom_start=2)
     
     for destino, group in grouped:
         coords =  get_coords(destino) #calculate the coordinates
+        if coords is None:
+            st.write(destino)
+            continue
         total = group["Numero Contenedores"].sum()
     
         popup_lines = '<div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">'
