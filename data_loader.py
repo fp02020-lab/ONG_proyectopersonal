@@ -20,10 +20,10 @@ def get_coords(country):
     return [location.latitude, location.longitude] if location else None
 
 @st.cache_data
-def load_historical_data(filename):
+def load_historical_data():
     ##### READ DATA
-    data_history_contenedores = pd.read_excel(filename, sheet_name= "All containers", engine="openpyxl")
-    data_history_material = pd.read_excel(filename, sheet_name= "Material", engine="openpyxl")
+    data_history_contenedores = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "All containers", engine="openpyxl")
+    data_history_material = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "Material", engine="openpyxl")
 
     ##### ENVIOS
     years = sorted(data_history_contenedores["Fecha"].dropna().unique())

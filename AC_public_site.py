@@ -53,7 +53,7 @@ page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
 if page == "Envíos historicos":
     st.title('Ayuda Contenedores impacto')
     # Load data
-    df_contenedores, datasets, data_map = load_historical_data("Historical_data_AC.xlsx")
+    df_contenedores, datasets, data_map = load_historical_data()
 
     # Envios por año - histogramma y mapa
     st.subheader('📊 Histórico de envíos por año')
