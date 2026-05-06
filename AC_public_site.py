@@ -145,9 +145,11 @@ selected = st.selectbox(
     list(datasets.keys()))
 
 df_selected = datasets[selected]
-total_selected = df_selected["Envíos"].sum()
-
-st.metric(f"Total {selected}", total_selected)
+total_selected = int(df_selected["Envíos"].sum())
+if selected == "Comida":
+    st.metric(f"Total {selected}", f"{total_selected/1000} ton")
+else:
+    st.metric(f"Total {selected}", total_selected)
 
 st.bar_chart(
     df_selected.set_index("Año"),
