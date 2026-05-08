@@ -312,6 +312,7 @@ elif page == "Material enviado":
        
     #%% MATERIAL ENVIADO - CARDS -
     st.subheader('📦 Material enviado')
+    st.markdown("<div style='height:25px;'></div>", unsafe_allow_html=True) # spacing vertical
     
     # Calculate and display totals
     
@@ -471,13 +472,13 @@ elif page == "Material enviado":
         col9, col10, col11, col12 = st.columns(4)
         with col9:
             total_cleaning = data_show["Limpieza y higiene [-]"].sum()  
-            card("images/higiene.png", f"{total_cleaning} articulos de limpieza y higiene", 
+            card("images/higiene.png", f"{total_cleaning} material de limpieza y higiene", 
                  "Incluye pallets y cajas de material de limpieza y higiene.")
     
         with col10:
             total_others = data_show["Otro [-]"].sum()  
             card("images/others.png", f"{total_others} otro material", 
-                 "Incluye placas solares suelta, tela, equipos electrónicos, piezas de repuesto y todas las donacciones que no caben en una categoria especifica.")        
+                 "Incluye todas las donacciones que no caben en una categoria especifica.")        
     
         with col11:
             pass
