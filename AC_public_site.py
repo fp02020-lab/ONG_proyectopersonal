@@ -495,8 +495,39 @@ elif page == "Material enviado":
     
         popup_lines = ""
     
-        if count > 1:
-            popup_lines = '<div style="font-size:12px;"><ul style="padding-left:15px; margin:0;">'
+        if count > 15:
+            popup_lines = f"""
+            <div style="font-size:12px;">
+                <b>{group.iloc[0]['Destino']}</b><br>
+            """
+        
+            containers = []
+        
+            for _, row in group.iterrows():
+        
+                year = str(row['Fecha'])[:4]
+        
+                containers.append(
+                    f"""
+                    <a href="{row['Enlace']}" target="_blank"
+                       style="text-decoration:none; font-weight:bold;">
+                        {row['Numero Contenedor']}
+                    </a> ({year})
+                    """
+                )
+        
+            popup_lines += "Contenedor " + ", ".join(containers)
+        
+            popup_lines += "</div>"
+        
+        
+        elif count > 1:
+        
+            popup_lines = f'''
+            <div style="font-size:12px;">
+                <ul style="padding-left:15px; margin:0;">
+                    <b>{row['Destino']}</b>
+            '''
         
             for _, row in group.iterrows():
                 popup_lines += f"""
@@ -504,22 +535,24 @@ elif page == "Material enviado":
                     <a href="{row['Enlace']}" target="_blank"
                        style="text-decoration:none; font-weight:bold;">
                         Contenedor {row['Numero Contenedor']}
-                    </a> a {row['Destino']} {str(row['Fecha'])[:10]}
+                    </a> {str(row['Fecha'])[:10]}
                 </li>
                 """
         
             popup_lines += "</ul></div>"
         
+        
         else:
-            # single item → no bullet list
+        
             row = group.iloc[0]
         
             popup_lines = f"""
             <div style="font-size:12px;">
+                <b>{row['Destino']}</b><br>
                 <a href="{row['Enlace']}" target="_blank"
                    style="text-decoration:none; font-weight:bold;">
                     Contenedor {row['Numero Contenedor']}
-                </a> a {row['Destino']} {str(row['Fecha'])[:10]}
+                </a> {str(row['Fecha'])[:10]}
             </div>
             """
         # for _, row in group.iterrows():
