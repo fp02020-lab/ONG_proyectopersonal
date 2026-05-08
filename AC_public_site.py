@@ -310,7 +310,7 @@ elif page == "Material enviado":
             if selected_countries:
                 data_show = data_show[data_show['Destino'].isin(selected_countries)]
        
-    #%%
+    #%% MATERIAL ENVIADO - CARDS -
     st.subheader('📦 Material enviado')
     
     # Calculate and display totals
@@ -332,14 +332,14 @@ elif page == "Material enviado":
                 align-items:center;
             ">
                 <img src="data:image/png;base64,{img_base64}" height="80">
-                <div style="font-size:18px; margin-top:10px; font-weight:bold;">
+                <div style="font-size:16px; margin-top:20px; font-weight:bold;">
                     {text}
                     <details style="display:inline;">
                             <summary style="
                                 display:inline;
                                 cursor:pointer;
                                 margin-left:5px;
-                                font-size:12px;
+                                font-size:10px;
                                 background:#eee;
                                 border-radius:50%;
                                 padding:2px 6px;
@@ -359,7 +359,7 @@ elif page == "Material enviado":
         total_bicis = data_show["Bicis [-]"].sum()
         # card("images/bike.png", f"{total_bicis} bicis")
         card("images/bike.png",
-             f"{total_bicis} bicis",
+             f"{total_bicis} bicicletas",
              "Número de bicicletas enviadas, no incluye las piezas de repuesto.")
     
     with col2:
