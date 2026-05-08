@@ -482,17 +482,16 @@ elif page == "Material enviado":
     st.subheader('📍 Mapa de envios')
     
     # Group data by coordinates
-    data_show = data_show.copy()
-    data_show = data_show[data_show['coords'].notna()]
-    data_show['coords'] = data_show['coords'].apply(
-        lambda x: tuple(x) if isinstance(x, list) else x)
-    grouped = data_show.groupby('coords')
+    data_show = data_show.copy()    
+    data_show = data_show.dropna(subset=["coords"])  # remove unmatched cases 
+    grouped = data_show.groupby('Destino') # group by location
     
     # Plot map
     m = folium.Map(location=[20, 0], zoom_start=2)
     
-    for coords, group in grouped:
+    for destino, group in grouped:
         count = len(group)
+        coords = group["coords"].iloc[0]
     
         popup_lines = ""
     
