@@ -114,8 +114,6 @@ def load_detailed_data(filename):
     data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 
     # Add coordinates countries
-    # coords_dict = get_coords()
-    # data_general['coords'] = data_general['Destino'].map(coords_dict)
     coords_dict = get_coords()
     normalized_coords = {
         normalize_country(k): v
@@ -124,11 +122,8 @@ def load_detailed_data(filename):
         data_general['Destino']
         .apply(normalize_country)
         .map(normalized_coords) )
-    
-    #old way
-    # unique_countries = data_general['Destino'].dropna().unique()
-    # coords_dict = {c: get_coords(c) for c in unique_countries}
-    # data_general['coords'] = data_general['Destino'].map(coords_dict)
+    data_general = data_general.sort_values(by=["Numero Contenedor"]) # sort numero contenedor
+
     return data_general
 
 
