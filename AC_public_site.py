@@ -332,7 +332,7 @@ elif page == "Material enviado":
                 align-items:center;
             ">
                 <img src="data:image/png;base64,{img_base64}" height="80">
-                <div style="font-size:16px; margin-top:20px; font-weight:bold;">
+                <div style="font-size:17px; margin-top:20px; font-weight:bold;">
                     {text}
                     <details style="display:inline;">
                             <summary style="
@@ -344,7 +344,7 @@ elif page == "Material enviado":
                                 border-radius:50%;
                                 padding:2px 6px;
                             ">?</summary>
-                            <div style="font-size:12px; margin-top:5px;">
+                            <div style="font-size:12px; margin-top:5px; font-weight:normal;">
                                 {info}
                             </div>
                         </details>
@@ -369,18 +369,13 @@ elif page == "Material enviado":
     
     with col3:
         total_food = data_show["Comida [tons]"].sum()
-        card("images/food.png", f"{total_food/1000:.1f} ton de comida", 
+        card("images/food.png", f"{total_food/1000:.1f}ton de comida", 
              "Toneladas de alimentos enviadas.")
     
     with col4:
         total_clothes = data_show["Ropa [-]"].sum()  
-        card("images/clothes.png", f"{total_clothes} cajas de ropa", 
-             "Incluye ropa, bolsas, zapatos, ropa de seguridad y complementos.")
-        
-        
-        
-    #### MISSING SILLAS DE RUEDAS, CAMAS DE HOSPITAL, PORTERIAS ###########
-    ######TO ADD!!!!!!!!!!!!!!!!!
+        card("images/clothes.png", f"{total_clothes} ropa", 
+             "Incluye cajas de ropa, bolsas, zapatos, ropa de seguridad y complementos.")
     
     # ---- ROW 2 (4 columns) ----
     st.write("") # spacing vertical
@@ -388,7 +383,7 @@ elif page == "Material enviado":
     
     with col5:
         total_hospital = data_show["Hospital [-]"].sum()  
-        card("images/hospital.png", f"{total_hospital} cajas de material de hospital",
+        card("images/hospital.png", f"{total_hospital} material de hospital",
              "Incluye cajas de material sanitario y equipos médicos (por ejemplo, máquinas médicas y andadores).")
     
     with col6:
@@ -450,8 +445,8 @@ elif page == "Material enviado":
     
         with col7:
             total_porterias = data_show["Porterias de futbol [-]"].sum()  
-            card("images/porterias.png", f"{total_porterias} porterias de futbol", 
-                 "Número de porterias de futbol enviadas.")
+            card("images/porterias.png", f"{total_porterias} porterias de fútbol", 
+                 "Número de porterias de fútbol enviadas.")
             
         with col8:
             total_school = data_show["Material escolar [-]"].sum()  
@@ -463,7 +458,7 @@ elif page == "Material enviado":
         col9, col10, col11, col12 = st.columns(4)
         with col9:
             total_cleaning = data_show["Limpieza y higiene [-]"].sum()  
-            card("images/higiene.png", f"{total_cleaning} cajas de material de limpieza y higiene", 
+            card("images/higiene.png", f"{total_cleaning} articulos de limpieza y higiene", 
                  "Incluye pallets y cajas de material de limpieza y higiene.")
     
         with col10:
