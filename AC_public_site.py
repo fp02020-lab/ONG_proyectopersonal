@@ -324,13 +324,15 @@ elif page == "Material enviado":
     
         st.markdown(f"""
             <div style="
-                text-align:center;
-                height:150px;
-                display:flex;
-                flex-direction:column;
-                justify-content:center;
-                align-items:center;
-            ">
+                    text-align:center;
+                    height:170px;
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:center;
+                    align-items:center;
+                    margin-bottom:30px;
+                    padding:10px;
+                ">
                 <img src="data:image/png;base64,{img_base64}" height="80">
                 <div style="font-size:17px; margin-top:20px; font-weight:bold;">
                     {text}
@@ -378,7 +380,7 @@ elif page == "Material enviado":
              "Incluye cajas de ropa, bolsas, zapatos, ropa de seguridad y complementos.")
     
     # ---- ROW 2 (4 columns) ----
-    st.write("") # spacing vertical
+    st.markdown("<div style='height:25px;'></div>", unsafe_allow_html=True) # spacing vertical
     col5, col6, col7, col8 = st.columns(4)
     
     with col5:
@@ -401,9 +403,20 @@ elif page == "Material enviado":
         card("images/costura.png", f"{total_sewing} máquinas de coser", 
              "Número de máquinas de coser enviadas, no incluye tela y otro material de costura.")
         
+    st.markdown("<div style='margin-top:40px;'></div>", unsafe_allow_html=True)
     expander = st.expander("Otras donaciones")
     
     with expander:
+        st.markdown("""
+        <style>
+        div[data-testid="stExpander"] details div[role="group"] {
+            padding-top: 20px;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-bottom: 10px;
+        }
+        </style>
+        """, unsafe_allow_html=True)
     
         # ---- ROW 1 ----
         col1, col2, col3, col4 = st.columns(4)
@@ -430,7 +443,7 @@ elif page == "Material enviado":
            
     
         # ---- ROW 2 ----
-        st.write("") # spacing vertical
+        st.markdown("<div style='height:25px;'></div>", unsafe_allow_html=True) # spacing vertical
         col5, col6, col7, col8 = st.columns(4)
     
         with col5:
@@ -454,7 +467,7 @@ elif page == "Material enviado":
                  "Incluye libros, pupitres, sillas, pizarras y otro material.")
         
         # ---- ROW 3 ----
-        st.write("") # spacing vertical
+        st.markdown("<div style='height:25px;'></div>", unsafe_allow_html=True) # spacing vertical
         col9, col10, col11, col12 = st.columns(4)
         with col9:
             total_cleaning = data_show["Limpieza y higiene [-]"].sum()  
