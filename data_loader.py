@@ -123,7 +123,7 @@ def load_detailed_data(filename):
         .apply(normalize_country)
         .map(normalized_coords) )
     data_general = data_general.sort_values(by=["Numero Contenedor"]) # sort numero contenedor
-
+    data_general = data_general.reset_index(drop=True)
     return data_general
 
 
