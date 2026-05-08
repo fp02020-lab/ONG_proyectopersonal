@@ -498,7 +498,7 @@ elif page == "Material enviado":
         if count > 15:
             popup_lines = f"""
             <div style="font-size:12px;">
-                <b>{group.iloc[0]['Destino']}</b><br>
+                <b>{destino}</b><br>
             """
         
             containers = []
@@ -513,20 +513,17 @@ elif page == "Material enviado":
                        style="text-decoration:none; font-weight:bold;">
                         {row['Numero Contenedor']}
                     </a> ({year})
-                    """
-                )
+                    """ )
         
             popup_lines += "Contenedor " + ", ".join(containers)
-        
             popup_lines += "</div>"
         
         
         elif count > 1:
-        
             popup_lines = f'''
             <div style="font-size:12px;">
                 <ul style="padding-left:15px; margin:0;">
-                    <b>{row['Destino']}</b>
+                    <b>{destino}</b>
             '''
         
             for _, row in group.iterrows():
@@ -543,26 +540,18 @@ elif page == "Material enviado":
         
         
         else:
-        
             row = group.iloc[0]
         
             popup_lines = f"""
             <div style="font-size:12px;">
-                <b>{row['Destino']}</b><br>
+                <b>{destino}</b><br>
                 <a href="{row['Enlace']}" target="_blank"
                    style="text-decoration:none; font-weight:bold;">
                     Contenedor {row['Numero Contenedor']}
                 </a> {str(row['Fecha'])[:10]}
             </div>
             """
-        # for _, row in group.iterrows():
-        #     popup_lines += f"""
-        #     <a href="{row['Enlace']}" target="_blank">
-        #         Contenedor {row['Numero Contenedor']}
-        #     </a> a {row['Destino']}<br>
-        #     {str(row['Fecha'])[:10]}<br><br>
-        #     """
-    
+        
         folium.Marker(
             location=list(coords),  # convert back to list for folium
             popup=folium.Popup(popup_lines, max_width=300),
@@ -580,8 +569,7 @@ elif page == "Material enviado":
                     {count}
                 </div>
                 """
-            )
-        ).add_to(m)
+            )).add_to(m)
     
     st_folium(m, width=700, height=500)
     
