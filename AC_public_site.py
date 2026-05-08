@@ -110,10 +110,11 @@ div[data-testid="stVerticalBlock"] {
     # return coords_cache[country]
 
 #%%
-from pages import page1
+# from pages import page1
+from page1 import render
 from data_loader import load_historical_data
 
-st.set_page_config(page_title="Envíos historicos")
+# st.set_page_config(page_title="Envíos historicos")
 
 page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
 
@@ -217,7 +218,7 @@ if page == "Envíos historicos":
     st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
 
 elif page == "Material enviado":
-    page1.render()   
+    render()   
 
 
 
