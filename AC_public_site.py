@@ -203,7 +203,14 @@ elif page == "Material enviado":
             # data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
             
             
-    st.sidebar.text("Nota: solo están disponibles los datos detallados de los contenedores posteriores al año 2025.")
+    st.sidebar.markdown(
+        """
+        <div style='font-size:11px; color:#888888; font-style:italic;'>
+        Nota: solo están disponibles los datos detallados de los contenedores posteriores al año 2025.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
     st.sidebar.markdown("---")
     
     # LOCATION 
