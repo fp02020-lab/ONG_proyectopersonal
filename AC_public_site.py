@@ -203,6 +203,7 @@ elif page == "Material enviado":
             # data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
             
             
+    st.sidebar.text("Nota: solo están disponibles los datos detallados de los contenedores posteriores al año 2025.")
     st.sidebar.markdown("---")
     
     # LOCATION 
