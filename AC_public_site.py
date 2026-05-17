@@ -150,7 +150,7 @@ elif page == "Material enviado":
     
     ### NEW VERSION
     from data_loader import load_detailed_data
-    data_general = load_detailed_data("tabla_publica__TEST.xlsx")
+    data_general = load_detailed_data("tabla_publica__17_05_2026.xlsx")
     start_year = data_general['Fecha'].min().year #.strftime("%Y")
     end_year = data_general['Fecha'].max().year #.strftime("%Y")
     
@@ -415,7 +415,7 @@ elif page == "Material enviado":
     
     # Group data by coordinates
     data_show = data_show.copy()    
-    data_show = data_show.dropna(subset=["coords"])  # remove unmatched cases 
+    # data_show = data_show.dropna(subset=["coords"])  # remove unmatched cases 
     grouped = data_show.groupby('Destino') # group by location
     
     # Plot map
@@ -423,7 +423,7 @@ elif page == "Material enviado":
     
     for destino, group in grouped:
         count = len(group)
-        coords = group["coords"].iloc[0]
+        # coords = group["coords"].iloc[0]
     
         popup_lines = ""
     
@@ -485,7 +485,8 @@ elif page == "Material enviado":
             """
         
         folium.Marker(
-            location=list(coords),  # convert back to list for folium
+            # location=list(coords),  # convert back to list for folium
+            location=[group["Latitud"].iloc[0], group["Longitud"].iloc[0]],
             popup=folium.Popup(popup_lines, max_width=300),
             icon=DivIcon(
                 html=f"""
