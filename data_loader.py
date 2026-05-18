@@ -20,13 +20,13 @@ import streamlit as st
 #     time.sleep(1)
 #     location = geolocator.geocode(country)
 #     return [location.latitude, location.longitude] if location else None
-# @st.cache_data
-# def get_coords():
-#     df_coords = pd.read_excel("Historical_data_AC.xlsx", sheet_name= "Countries coordinates", engine="openpyxl")
-#     coords_dict = {
-#         row['Country']: [row['Latitude'], row['Longitude']]
-#         for _, row in df_coords.iterrows()}
-#     return coords_dict
+@st.cache_data
+def get_coords():
+    df_coords = pd.read_excel("tabla_publica__18_05_2026.xlsx", sheet_name= "Destinos", engine="openpyxl")
+    coords_dict = {
+        row['Destino']: [row['Latitud'], row['Longitud']]
+        for _, row in df_coords.iterrows()}
+    return coords_dict
 
 
 @st.cache_data
@@ -68,7 +68,7 @@ def load_detailed_data(filename):
     data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 
     # Add coordinates countries
-    # coords_dict = get_coords()
+    coords_dict = get_coords()
     # normalized_coords = {
     #     normalize_country(k): v
     #     for k, v in coords_dict.items() }
@@ -76,6 +76,7 @@ def load_detailed_data(filename):
     #     data_general['Destino']
     #     .apply(normalize_country)
     #     .map(normalized_coords) )
+    data_general['coords'] = data_general['Destino'].map(coords_dict) 
     data_general = data_general.sort_values(by=["Numero Contenedor"]) # sort numero contenedor
     data_general = data_general.reset_index(drop=True)
     return data_general
