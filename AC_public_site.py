@@ -58,7 +58,7 @@ if page == "Envíos historicos":
     df_contenedores, datasets, data_map = load_historical_data()
 
     # Envios por año - histogramma y mapa
-    st.subheader('📊 Histórico de envíos por año IHIHI')
+    st.subheader('📊 Histórico de envíos por año')
     total_contenedores = df_contenedores["Envíos"].sum()
     st.metric("Total contenedores", total_contenedores)
     # st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50") # BAR CHART IS LIMITED, no formatting allowed
