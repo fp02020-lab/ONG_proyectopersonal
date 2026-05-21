@@ -4,5 +4,4 @@ numpy
 openpyxl
 folium
 streamlit-folium
-geopy
 altair
