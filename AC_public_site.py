@@ -14,6 +14,7 @@ from streamlit_folium import st_folium
 import folium
 from folium.features import DivIcon
 import numpy as np
+import altair as alt
 
 #%% SET GRAPHICS
 st.markdown("""
@@ -46,7 +47,7 @@ from data_loader import load_historical_data
 page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
 
 if page == "Envíos historicos":
-    st.title('Ayuda Contenedores impacto')
+    st.title('Ayuda Contenedores impacto lol')
     # Load data
     df_contenedores, datasets, data_map = load_historical_data()
 
@@ -54,7 +55,28 @@ if page == "Envíos historicos":
     st.subheader('📊 Histórico de envíos por año')
     total_contenedores = df_contenedores["Envíos"].sum()
     st.metric("Total contenedores", total_contenedores)
-    st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50")
+    # st.bar_chart(df_contenedores.set_index("Año"), color="#4CAF50") # BAR CHART IS LIMITED, no formatting allowed
+    chart = alt.Chart(df_contenedores).mark_bar(color="#4CAF50").encode(
+        x=alt.X(
+            "Año:O",
+            axis=alt.Axis(
+                labelFontSize=20,   # size of axis numbers/text
+                titleFontSize=18
+            )
+        ),
+        y=alt.Y(
+            "Envíos:Q",
+            axis=alt.Axis(
+                labelFontSize=20,
+                titleFontSize=18
+            )
+        )
+    ).properties(
+        width=700,
+        height=400
+    )
+    
+    st.altair_chart(chart, use_container_width=True)
 
 
 
