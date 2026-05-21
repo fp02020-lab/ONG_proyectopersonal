@@ -61,7 +61,7 @@ if page == "Envíos historicos":
             "Año:O",
             axis=alt.Axis(labelFontSize=16, titleFontSize=18) ),
         y=alt.Y(
-            "Envíos:Q",
+            "Contenedores enviados:Q",
             axis=alt.Axis(labelFontSize=16, titleFontSize=18))
     ).properties(width=700, height=400)
     
@@ -160,7 +160,7 @@ if page == "Envíos historicos":
             "Año:O",
             axis=alt.Axis(labelFontSize=16, titleFontSize=18) ),
         y=alt.Y(
-            "Envíos:Q",
+            f"Envíos {selected}:Q",
             axis=alt.Axis(labelFontSize=16, titleFontSize=18))
     ).properties(width=700, height=400)
     
