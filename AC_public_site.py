@@ -15,6 +15,7 @@ import folium
 from folium.features import DivIcon
 import numpy as np
 import altair as alt
+from pathlib import Path
 
 #%% SET GRAPHICS
 st.markdown("""
@@ -45,6 +46,11 @@ div[data-testid="stVerticalBlock"] {
 from data_loader import load_historical_data
 
 page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
+
+### Find most uptodate file for data
+files_available = list(Path(".").glob("*tabla_publica*.xlsx")) #find files in GitHub directory
+# Pick the most recently modified file
+filename = max(files_available, key=lambda f: f.stat().st_mtime)
 
 if page == "Envíos historicos":
     st.title('Ayuda Contenedores impacto')
@@ -90,7 +96,7 @@ if page == "Envíos historicos":
     
     ## 2. Plot  
     from data_loader import get_coords
-    coords_dict = get_coords()
+    coords_dict = get_coords(filename)
     filtered_data["coords"] = filtered_data["Destino"].map(coords_dict)
     filtered_data = filtered_data.dropna(subset=["coords"])
     grouped = filtered_data.groupby("Destino")
@@ -169,7 +175,7 @@ elif page == "Material enviado":
     
     ### NEW VERSION
     from data_loader import load_detailed_data
-    data_general = load_detailed_data("tabla_publica__18_05_2026.xlsx")
+    data_general = load_detailed_data(filename)
     start_year = data_general['Fecha'].min().year #.strftime("%Y")
     end_year = data_general['Fecha'].max().year #.strftime("%Y")
     
@@ -212,15 +218,6 @@ elif page == "Material enviado":
             data_show = data_show[
                 (data_show["Fecha"] >= pd.to_datetime(start_date)) &
                 (data_show["Fecha"] <= pd.to_datetime(end_date)) ]
-        
-            # date_range = st.date_input(
-            #     "Rango de fechas",
-            #     (first_contenedor_date, today),
-            #     first_contenedor_date,
-            #     today,
-            #     format="MM.DD.YYYY")
-            # data_show = data_show[(data_show['Fecha'] >= pd.to_datetime(date_range[0])) & (data_show['Fecha'] <= pd.to_datetime(date_range[1]))]
-            
             
     st.sidebar.markdown(
         """
@@ -228,8 +225,7 @@ elif page == "Material enviado":
         Nota: solo están disponibles los datos detallados de los contenedores posteriores al año 2025.
         </div>
         """,
-        unsafe_allow_html=True
-    )
+        unsafe_allow_html=True )
     st.sidebar.markdown("---")
     
     # LOCATION 
