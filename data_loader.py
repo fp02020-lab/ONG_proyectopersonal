@@ -13,8 +13,8 @@ import streamlit as st
 
 #%% Cache: geocoding and data
 @st.cache_data
-def get_coords():
-    df_coords = pd.read_excel("tabla_publica__18_05_2026.xlsx", sheet_name= "Destinos", engine="openpyxl")
+def get_coords(filename):
+    df_coords = pd.read_excel(filename, sheet_name= "Destinos", engine="openpyxl")
     coords_dict = {
         row['Destino']: [row['Latitud'], row['Longitud']]
         for _, row in df_coords.iterrows()}
@@ -60,7 +60,7 @@ def load_detailed_data(filename):
     data_general['Fecha'] = pd.to_datetime(data_general['Fecha'], dayfirst=True, errors="coerce")
 
     # Add coordinates countries
-    coords_dict = get_coords()
+    coords_dict = get_coords(filename)
     data_general['coords'] = data_general['Destino'].map(coords_dict) 
     data_general = data_general.sort_values(by=["Numero Contenedor"]) # sort numero contenedor
     data_general = data_general.reset_index(drop=True)
