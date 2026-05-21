@@ -9,17 +9,9 @@ Data loader and coordinates creator
 
 import pandas as pd
 import numpy as np
-from geopy.geocoders import Nominatim
 import streamlit as st
 
 #%% Cache: geocoding and data
-# geolocator = Nominatim(user_agent="my_app", timeout=10 )
-# @st.cache_data
-# def get_coords(country):
-#     import time
-#     time.sleep(1)
-#     location = geolocator.geocode(country)
-#     return [location.latitude, location.longitude] if location else None
 @st.cache_data
 def get_coords():
     df_coords = pd.read_excel("tabla_publica__18_05_2026.xlsx", sheet_name= "Destinos", engine="openpyxl")
@@ -69,35 +61,7 @@ def load_detailed_data(filename):
 
     # Add coordinates countries
     coords_dict = get_coords()
-    # normalized_coords = {
-    #     normalize_country(k): v
-    #     for k, v in coords_dict.items() }
-    # data_general['coords'] = (
-    #     data_general['Destino']
-    #     .apply(normalize_country)
-    #     .map(normalized_coords) )
     data_general['coords'] = data_general['Destino'].map(coords_dict) 
     data_general = data_general.sort_values(by=["Numero Contenedor"]) # sort numero contenedor
     data_general = data_general.reset_index(drop=True)
     return data_general
-
-
-
-# import unicodedata
-# import re
-
-# def normalize_country(text):
-#     if not isinstance(text, str):
-#         return text
-
-#     # lowercase
-#     text = text.lower()
-
-#     # remove accents
-#     text = unicodedata.normalize('NFKD', text)
-#     text = ''.join(c for c in text if not unicodedata.combining(c))
-
-#     # remove extra spaces
-#     text = re.sub(r'\s+', ' ', text).strip()
-
-#     return text

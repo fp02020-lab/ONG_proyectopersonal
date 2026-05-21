@@ -132,8 +132,7 @@ if page == "Envíos historicos":
                     {total}
                 </div>
                 """
-            )
-        ).add_to(m)
+            )).add_to(m)
     
     # render in Streamlit
     st_folium(m, width=700, height=500)
@@ -153,8 +152,6 @@ if page == "Envíos historicos":
     else:
         st.metric(f"Total {selected}", total_selected)
 
-    # st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
-    
     chart = alt.Chart(df_selected).mark_bar(color="#4CAF50").encode(
         x=alt.X(
             "Año:O",
