@@ -47,7 +47,7 @@ from data_loader import load_historical_data
 page = st.sidebar.selectbox("Go to", ["Envíos historicos", "Material enviado"])
 
 if page == "Envíos historicos":
-    st.title('Ayuda Contenedores impacto lol')
+    st.title('Ayuda Contenedores impacto')
     # Load data
     df_contenedores, datasets, data_map = load_historical_data()
 
@@ -59,22 +59,11 @@ if page == "Envíos historicos":
     chart = alt.Chart(df_contenedores).mark_bar(color="#4CAF50").encode(
         x=alt.X(
             "Año:O",
-            axis=alt.Axis(
-                labelFontSize=20,   # size of axis numbers/text
-                titleFontSize=18
-            )
-        ),
+            axis=alt.Axis(labelFontSize=16, titleFontSize=18) ),
         y=alt.Y(
             "Envíos:Q",
-            axis=alt.Axis(
-                labelFontSize=20,
-                titleFontSize=18
-            )
-        )
-    ).properties(
-        width=700,
-        height=400
-    )
+            axis=alt.Axis(labelFontSize=16, titleFontSize=18))
+    ).properties(width=700, height=400)
     
     st.altair_chart(chart, use_container_width=True)
 
@@ -164,7 +153,18 @@ if page == "Envíos historicos":
     else:
         st.metric(f"Total {selected}", total_selected)
 
-    st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
+    # st.bar_chart(df_selected.set_index("Año"), color="#4CAF50")
+    
+    chart = alt.Chart(df_selected).mark_bar(color="#4CAF50").encode(
+        x=alt.X(
+            "Año:O",
+            axis=alt.Axis(labelFontSize=16, titleFontSize=18) ),
+        y=alt.Y(
+            "Envíos:Q",
+            axis=alt.Axis(labelFontSize=16, titleFontSize=18))
+    ).properties(width=700, height=400)
+    
+    st.altair_chart(chart, use_container_width=True)
 
 #%% PAGE 2 - MATERIAL ENVIADO
 elif page == "Material enviado":
