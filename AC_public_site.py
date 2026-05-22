@@ -310,7 +310,7 @@ elif page == "Material enviado":
     
     with col3:
         total_food = data_show["Comida [tons]"].sum()
-        card("images/food.png", f"{total_food/1000:.1f}ton de comida", 
+        card("images/food.png", f"{total_food:.1f}ton de comida", 
              "Toneladas de alimentos enviadas.")
     
     with col4:
